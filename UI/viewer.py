@@ -9,10 +9,6 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtWidgets import QColorDialog
-
-from dicomUtil import Dicom
 
 
 class Ui_MainWindow(object):
@@ -186,7 +182,7 @@ class Ui_MainWindow(object):
         spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem3)
         self.tImage = QtWidgets.QLabel(self.transverse)
-        self.tImage.setMaximumSize(QtCore.QSize(615, 370))
+        self.tImage.setMaximumSize(QtCore.QSize(615, 350))
         self.tImage.setText("")
         self.tImage.setObjectName("tImage")
         self.verticalLayout_4.addWidget(self.tImage)
@@ -213,7 +209,7 @@ class Ui_MainWindow(object):
         spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_5.addItem(spacerItem5)
         self.sImage = QtWidgets.QLabel(self.sagittal)
-        self.sImage.setMaximumSize(QtCore.QSize(615, 370))
+        self.sImage.setMaximumSize(QtCore.QSize(615, 420))
         self.sImage.setText("")
         self.sImage.setObjectName("sImage")
         self.verticalLayout_5.addWidget(self.sImage)
@@ -286,60 +282,14 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.importFile = QtWidgets.QAction(MainWindow)
         self.importFile.setObjectName("importFile")
-        self.importFile.triggered.connect(self.importFileAction)
         self.exportFile = QtWidgets.QAction(MainWindow)
         self.exportFile.setObjectName("exportFile")
-        self.exportFile.triggered.connect(self.exportFileAction)
         self.menu.addAction(self.importFile)
         self.menu.addAction(self.exportFile)
         self.menubar.addAction(self.menu.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.colorPickerTrigger.clicked.connect(self.clickColorPickerTrigger)  # 颜色选择器
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-    def clickColorPickerTrigger(self):
-        color = QColorDialog.getColor()
-        if color.isValid():
-            # 在 Label 上显示选择的颜色
-            self.colorLabel.setStyleSheet(f'background-color: {color.name()}')
-
-    def importFileAction(self):
-        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "选择文件", "", "All Files (*)")
-        if file_path:
-            print("选择的文件路径：", file_path)
-            dicomFile = Dicom(file_path)
-            self.showInfo(dicomFile)
-            self.showImage(dicomFile)
-
-    def exportFileAction(self):
-        pass
-
-    def showCertainImage(self, label, pixel_array):
-        label.setScaledContents(True)
-        width, height = pixel_array.shape[1], pixel_array.shape[0]
-        image = QImage(pixel_array.tobytes(), width, height, QImage.Format_RGB888)
-        pixmap = QPixmap.fromImage(image)
-        label.setPixmap(pixmap)
-
-    def showImage(self, dicomFile):
-        self.showCertainImage(self.tImage, dicomFile.pixelTransverse(1))
-        self.showCertainImage(self.sImage, dicomFile.pixelSagittal())
-        self.showCertainImage(self.cImage, dicomFile.pixelCoronal())
-    def showInfo(self, dicomFile):
-        patient = dicomFile.patient
-        self.name.setText("姓名：" + patient.name)
-        self.sex.setText("性别："+ patient.sex)
-        self.age.setText("年龄:" + patient.age)
-        self.pid.setText("id：" + patient.pid)
-        self.birthday.setText("生日：" + patient.birthday)
-
-        self.time.setText("检查时间：" + dicomFile.study_date)
-        self.modality.setText("类型：" + dicomFile.modality)
-        self.institution.setText("检查机构：" + dicomFile.institution_name)
-        self.frameNum.setText("帧数：" + str(dicomFile.pixel_array.shape[0]))
-        self.part.setText("检查部位：" + dicomFile.body_part_examined)
-
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

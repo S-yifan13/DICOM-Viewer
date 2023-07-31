@@ -6,12 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1775</width>
+    <width>1844</width>
     <height>980</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="toolTipDuration">
+   <number>-5</number>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(227, 227, 227);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QFrame" name="showControl">
@@ -214,7 +220,7 @@
      <rect>
       <x>1560</x>
       <y>30</y>
-      <width>221</width>
+      <width>261</width>
       <height>871</height>
      </rect>
     </property>
@@ -239,35 +245,35 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_7">
+      <widget class="QLabel" name="pid">
        <property name="text">
         <string>ID</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_8">
+      <widget class="QLabel" name="name">
        <property name="text">
         <string>姓名</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_10">
+      <widget class="QLabel" name="sex">
        <property name="text">
         <string>性别</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_9">
+      <widget class="QLabel" name="birthday">
        <property name="text">
         <string>生日</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_11">
+      <widget class="QLabel" name="age">
        <property name="text">
         <string>年龄</string>
        </property>
@@ -291,28 +297,41 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_14">
+      <widget class="QLabel" name="institution">
        <property name="text">
-        <string>机构</string>
+        <string>检查机构</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_16">
+      <widget class="QLabel" name="part">
        <property name="text">
-        <string>部位</string>
+        <string>检查部位</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_15">
+      <widget class="QLabel" name="time">
        <property name="text">
-        <string>扫描时间</string>
+        <string>检查时间</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_17">
+      <widget class="QLabel" name="modality">
+       <property name="text">
+        <string>类型</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="frameNum">
        <property name="text">
         <string>帧数</string>
        </property>
@@ -400,7 +419,13 @@
          </spacer>
         </item>
         <item>
-         <widget class="QLabel" name="label_19">
+         <widget class="QLabel" name="tImage">
+          <property name="maximumSize">
+           <size>
+            <width>615</width>
+            <height>350</height>
+           </size>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -467,7 +492,13 @@
          </spacer>
         </item>
         <item>
-         <widget class="QLabel" name="label_21">
+         <widget class="QLabel" name="sImage">
+          <property name="maximumSize">
+           <size>
+            <width>615</width>
+            <height>420</height>
+           </size>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -601,7 +632,13 @@
          </spacer>
         </item>
         <item>
-         <widget class="QLabel" name="label_25">
+         <widget class="QLabel" name="cImage">
+          <property name="maximumSize">
+           <size>
+            <width>615</width>
+            <height>200</height>
+           </size>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -631,7 +668,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1775</width>
+     <width>1844</width>
      <height>26</height>
     </rect>
    </property>

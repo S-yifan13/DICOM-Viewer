@@ -1,6 +1,6 @@
 # Editor directories and files
-.idea
-.vscode
+.idea/
+.vscode/
 
 ## data file
 data/

@@ -26,12 +26,12 @@ class Dicom:
     def __init__(self, file_path):
         try:
             dataset = pydicom.dcmread(file_path)
-            self.dataset = dataset
 
             if dataset.Modality != 'OCT':
                 raise ValueError(dataset.Modality + ' is not supported. Only OCT is supported.')
 
             self.file_path = file_path
+            self.modality = dataset.Modality
 
             # 病人信息
             self.patient = Patient(dataset.PatientName, dataset.PatientID,
@@ -82,30 +82,24 @@ class Dicom:
             msg_box.setInformativeText(error_msg)
             msg_box.exec_()
 
-    def showTransverse(self, frame_index, colormap='afmhot'):
+    def pixelTransverse(self, frame_index):
         if frame_index < 0 or frame_index >= self.pixel_array.shape[0]:
             raise ValueError('frame_index out of range.')
 
-        transverse_view = self.pixel_array[frame_index, :self.transverseMaxY, :, 0]
-        plt.imshow(transverse_view, cmap=colormap)
-        plt.title("Transverse View " + str(frame_index))
-        plt.show()
+        transverse_view = self.pixel_array[frame_index, :self.transverseMaxY, :, :]
+        return transverse_view
 
-    def showSagittal(self, colormap='afmhot'):
+    def pixelSagittal(self):
         z = (self.transverseMaxX + self.transverseMinX) // 2
-        sagittal_view = self.pixel_array[:, :self.transverseMaxY, z, 0].transpose(1, 0)
+        sagittal_view = self.pixel_array[:, :self.transverseMaxY, z, :].transpose(1, 0, 2)
         sagittal_view = self.resizeXY(sagittal_view)
-        plt.imshow(sagittal_view, cmap=colormap)
-        plt.title("Sagittal View ")
-        plt.show()
+        return sagittal_view
 
-    def showCoronal(self, colormap='afmhot'):
+    def pixelCoronal(self):
         y = (self.transverseMinY + self.transverseMaxY) // 2
-        coronal_view = self.pixel_array[:, y, self.transverseMinX:self.transverseMaxX, 0].transpose(1, 0)
+        coronal_view = self.pixel_array[:, y, self.transverseMinX:self.transverseMaxX, :].transpose(1, 0, 2)
         coronal_view = self.resizeXY(coronal_view)
-        plt.imshow(coronal_view, cmap=colormap)
-        plt.title("Coronal View ")
-        plt.show()
+        return coronal_view
 
     def resizeXY(self, data):
         x = self.longitudinalMaxX - self.longitudinalMinX + 1
@@ -113,15 +107,28 @@ class Dicom:
         data_resized = cv2.resize(data, (x, y))
         return data_resized
 
+    def grey2rgb(self, data):
+        cmap = plt.get_cmap('afmhot')
+        return cmap(data)
+    def showImage(self):
+        plt.imshow(self.pixelTransverse(0))
+        plt.title('Transverse')
+        plt.show()
+        plt.imshow(self.pixelSagittal())
+        plt.title('Sagittal')
+        plt.show()
+        plt.imshow(self.pixelCoronal())
+        plt.title('Coronal')
 
-if __name__ == '__main__':
-    dicom = Dicom('data/data')
-    print(dicom.patient)
-    print(dicom.pixel_array.shape)
-    print(dicom.image_type)
-    dicom.showTransverse(1)
-    dicom.showSagittal()
-    dicom.showCoronal()
+
+# if __name__ == '__main__':
+#     dicom = Dicom('data/data')
+#     print(dicom.patient)
+#     print(dicom.pixel_array.shape)
+#     print(dicom.image_type)
+#     dicom.showTransverse(1)
+#     dicom.showSagittal()
+#     dicom.showCoronal()
 
 
 
