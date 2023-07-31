@@ -11,6 +11,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QColorDialog
 
+from fileUtil import importFile
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -223,14 +225,15 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.importFile = QtWidgets.QAction(MainWindow)
         self.importFile.setObjectName("importFile")
+        self.importFile.triggered.connect(self.importFileAction)
         self.outputFile = QtWidgets.QAction(MainWindow)
         self.outputFile.setObjectName("outputFile")
+        self.outputFile.triggered.connect(self.exportFileAction)
         self.menu.addAction(self.importFile)
         self.menu.addAction(self.outputFile)
         self.menubar.addAction(self.menu.menuAction())
-
         self.retranslateUi(MainWindow)
-        self.colorPickerTrigger.clicked.connect(self.clickColorPickerTrigger)
+        self.colorPickerTrigger.clicked.connect(self.clickColorPickerTrigger)  # 颜色选择器
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def clickColorPickerTrigger(self):
@@ -238,6 +241,15 @@ class Ui_MainWindow(object):
         if color.isValid():
             # 在 Label 上显示选择的颜色
             self.colorLabel.setStyleSheet(f'background-color: {color.name()}')
+
+    def importFileAction(self):
+        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "选择文件", "", "All Files (*)")
+        if file_path:
+            print("选择的文件路径：", file_path)
+            dicomFile = importFile(file_path)
+
+    def exportFileAction(self):
+        pass
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
