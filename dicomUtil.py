@@ -82,10 +82,12 @@ class Dicom:
             msg_box.setInformativeText(error_msg)
             msg_box.exec_()
 
+    def pixelAllTransverse(self):
+        return self.pixel_array[:, :self.transverseMaxY, :, :]
+
     def pixelTransverse(self, frame_index):
         if frame_index < 0 or frame_index >= self.pixel_array.shape[0]:
             raise ValueError('frame_index out of range.')
-
         transverse_view = self.pixel_array[frame_index, :self.transverseMaxY, :, :]
         return transverse_view
 

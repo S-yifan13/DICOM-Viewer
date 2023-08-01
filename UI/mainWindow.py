@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from imageLabel import ImageLabel
 # Form implementation generated from reading ui file 'viewer.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
@@ -15,21 +15,38 @@ from PyQt5.QtWidgets import QColorDialog
 from dicomUtil import Dicom
 
 
+def showCertainImage(label, pixel_array):
+    label.setScaledContents(True)
+    height, width, channel = pixel_array.shape
+    bytes_per_line = 3 * width
+    image = QImage(pixel_array, width, height, bytes_per_line, QImage.Format_RGB888)
+    pixmap = QPixmap.fromImage(image)
+    label.setPixmap(pixmap)
+
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1844, 980)
+        MainWindow.resize(1835, 980)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
+        MainWindow.setSizePolicy(sizePolicy)
+        MainWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        MainWindow.setBaseSize(QtCore.QSize(615, 0))
         MainWindow.setToolTipDuration(-5)
         MainWindow.setStyleSheet("background-color: rgb(227, 227, 227);")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.showControl = QtWidgets.QFrame(self.centralwidget)
-        self.showControl.setGeometry(QtCore.QRect(30, 30, 201, 461))
+        self.showControl.setGeometry(QtCore.QRect(30, 30, 191, 441))
         self.showControl.setStyleSheet("background-color: rgb(255,255,255);")
         self.showControl.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.showControl.setFrameShadow(QtWidgets.QFrame.Raised)
         self.showControl.setObjectName("showControl")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.showControl)
+        self.verticalLayout.setSpacing(10)
         self.verticalLayout.setObjectName("verticalLayout")
         self.label = QtWidgets.QLabel(self.showControl)
         self.label.setStyleSheet("fontsize: 15px; font-weight: bold")
@@ -75,15 +92,41 @@ class Ui_MainWindow(object):
         self.colorLabel.setObjectName("colorLabel")
         self.horizontalLayout.addWidget(self.colorLabel)
         self.verticalLayout.addWidget(self.widget)
+        self.widget_3 = QtWidgets.QWidget(self.showControl)
+        self.widget_3.setObjectName("widget_3")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.widget_3)
+        self.horizontalLayout_3.setContentsMargins(-1, 5, -1, 5)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.label_4 = QtWidgets.QLabel(self.widget_3)
+        self.label_4.setObjectName("label_4")
+        self.horizontalLayout_3.addWidget(self.label_4)
+        self.frameIndexLable = QtWidgets.QLabel(self.widget_3)
+        self.frameIndexLable.setText("")
+        self.frameIndexLable.setObjectName("frameIndexLable")
+        self.horizontalLayout_3.addWidget(self.frameIndexLable)
+        self.verticalLayout.addWidget(self.widget_3)
+        self.widget_2 = QtWidgets.QWidget(self.showControl)
+        self.widget_2.setObjectName("widget_2")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget_2)
+        self.horizontalLayout_2.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.frameIndexSpinBox = QtWidgets.QSpinBox(self.widget_2)
+        self.frameIndexSpinBox.setObjectName("frameIndexSpinBox")
+        self.horizontalLayout_2.addWidget(self.frameIndexSpinBox)
+        self.pushButton = QtWidgets.QPushButton(self.widget_2)
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout_2.addWidget(self.pushButton)
+        self.verticalLayout.addWidget(self.widget_2)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
         self.modelChoose = QtWidgets.QFrame(self.centralwidget)
-        self.modelChoose.setGeometry(QtCore.QRect(30, 520, 201, 391))
+        self.modelChoose.setGeometry(QtCore.QRect(30, 500, 201, 421))
         self.modelChoose.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.modelChoose.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.modelChoose.setFrameShadow(QtWidgets.QFrame.Raised)
         self.modelChoose.setObjectName("modelChoose")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.modelChoose)
+        self.verticalLayout_2.setSpacing(10)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.label_5 = QtWidgets.QLabel(self.modelChoose)
         self.label_5.setStyleSheet("fontsize: 15px; font-weight: bold")
@@ -110,6 +153,7 @@ class Ui_MainWindow(object):
         self.Info.setFrameShadow(QtWidgets.QFrame.Raised)
         self.Info.setObjectName("Info")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.Info)
+        self.verticalLayout_3.setSpacing(10)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.label_6 = QtWidgets.QLabel(self.Info)
         self.label_6.setStyleSheet("fontsize: 15px; font-weight: bold")
@@ -185,8 +229,9 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.addWidget(self.label_18)
         spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem3)
-        self.tImage = QtWidgets.QLabel(self.transverse)
-        self.tImage.setMaximumSize(QtCore.QSize(615, 370))
+        # self.tImage = QtWidgets.QLabel(self.transverse)
+        self.tImage = ImageLabel(self.transverse)
+        self.tImage.setMaximumSize(QtCore.QSize(615, 350))
         self.tImage.setText("")
         self.tImage.setObjectName("tImage")
         self.verticalLayout_4.addWidget(self.tImage)
@@ -213,10 +258,20 @@ class Ui_MainWindow(object):
         spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_5.addItem(spacerItem5)
         self.sImage = QtWidgets.QLabel(self.sagittal)
-        self.sImage.setMaximumSize(QtCore.QSize(615, 370))
+        self.sImage.setMaximumSize(QtCore.QSize(615, 350))
         self.sImage.setText("")
         self.sImage.setObjectName("sImage")
         self.verticalLayout_5.addWidget(self.sImage)
+        self.frameIndexSlider = QtWidgets.QSlider(self.sagittal)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frameIndexSlider.sizePolicy().hasHeightForWidth())
+        self.frameIndexSlider.setSizePolicy(sizePolicy)
+        self.frameIndexSlider.setStyleSheet("")
+        self.frameIndexSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.frameIndexSlider.setObjectName("frameIndexSlider")
+        self.verticalLayout_5.addWidget(self.frameIndexSlider)
         spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_5.addItem(spacerItem6)
         self.gridLayout.addWidget(self.sagittal, 0, 1, 1, 1)
@@ -276,7 +331,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.coronal, 1, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1844, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1835, 26))
         self.menubar.setObjectName("menubar")
         self.menu = QtWidgets.QMenu(self.menubar)
         self.menu.setObjectName("menu")
@@ -315,21 +370,16 @@ class Ui_MainWindow(object):
     def exportFileAction(self):
         pass
 
-    def showCertainImage(self, label, pixel_array):
-        label.setScaledContents(True)
-        width, height = pixel_array.shape[1], pixel_array.shape[0]
-        image = QImage(pixel_array.tobytes(), width, height, QImage.Format_RGB888)
-        pixmap = QPixmap.fromImage(image)
-        label.setPixmap(pixmap)
-
     def showImage(self, dicomFile):
-        self.showCertainImage(self.tImage, dicomFile.pixelTransverse(1))
-        self.showCertainImage(self.sImage, dicomFile.pixelSagittal())
-        self.showCertainImage(self.cImage, dicomFile.pixelCoronal())
+        self.tImage.frames = dicomFile.pixelAllTransverse()
+        self.tImage.showCurrentImage()
+        showCertainImage(self.sImage, dicomFile.pixelSagittal())
+        showCertainImage(self.cImage, dicomFile.pixelCoronal())
+
     def showInfo(self, dicomFile):
         patient = dicomFile.patient
         self.name.setText("姓名：" + patient.name)
-        self.sex.setText("性别："+ patient.sex)
+        self.sex.setText("性别：" + patient.sex)
         self.age.setText("年龄:" + patient.age)
         self.pid.setText("id：" + patient.pid)
         self.birthday.setText("生日：" + patient.birthday)
@@ -340,7 +390,6 @@ class Ui_MainWindow(object):
         self.frameNum.setText("帧数：" + str(dicomFile.pixel_array.shape[0]))
         self.part.setText("检查部位：" + dicomFile.body_part_examined)
 
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -350,6 +399,8 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "病灶透明度"))
         self.label_3.setText(_translate("MainWindow", "病灶颜色"))
         self.colorPickerTrigger.setText(_translate("MainWindow", "选择颜色"))
+        self.label_4.setText(_translate("MainWindow", "当前帧数"))
+        self.pushButton.setText(_translate("MainWindow", "跳转到帧"))
         self.label_5.setText(_translate("MainWindow", "模型选择区"))
         self.radioButton.setText(_translate("MainWindow", "模型1"))
         self.radioButton_2.setText(_translate("MainWindow", "模型2"))
