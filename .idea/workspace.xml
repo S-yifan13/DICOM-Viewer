@@ -5,14 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="08dbc0ef-a229-4837-bd77-8c507d1f8862" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/imageLabel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/DicomViewer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DicomViewer.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/image.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/image.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/mainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/mainWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/viewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/viewer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/viewer.ui" beforeDir="false" afterPath="$PROJECT_DIR$/UI/viewer.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dicomUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/dicomUtil.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/imageLabel.py" beforeDir="false" afterPath="$PROJECT_DIR$/imageLabel.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,7 +169,9 @@
       <workItem from="1690811470748" duration="8686000" />
       <workItem from="1690862259533" duration="5884000" />
       <workItem from="1690891355064" duration="168000" />
-      <workItem from="1690891580992" duration="4683000" />
+      <workItem from="1690891580992" duration="4767000" />
+      <workItem from="1690949939679" duration="2986000" />
+      <workItem from="1691048625831" duration="1069000" />
     </task>
     <task id="LOCAL-00001" summary="add: dicom类，信息读取、绘制三视图">
       <created>1690789206776</created>
@@ -189,7 +187,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690813665599</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="fix: 三视图bug解决; add: 滚轮切换帧">
+      <created>1690904464901</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1690904464901</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -198,7 +203,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add: dicom类，信息读取、绘制三视图" />
     <MESSAGE value="add: UI重建，dicom三视图及病人信息显示(有bug)" />
-    <option name="LAST_COMMIT_MESSAGE" value="add: UI重建，dicom三视图及病人信息显示(有bug)" />
+    <MESSAGE value="fix: 三视图bug解决; add: 滚轮切换帧" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: 三视图bug解决; add: 滚轮切换帧" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -210,8 +216,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/imageLabel.py</url>
-          <line>12</line>
+          <line>14</line>
           <option name="timeStamp" value="39" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/UI/mainWindow.py</url>
+          <line>375</line>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/imageLabel.py</url>
+          <line>48</line>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/imageLabel.py</url>
+          <line>26</line>
+          <option name="timeStamp" value="42" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -225,7 +246,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/DicomViewer$mainWindow.coverage" NAME="mainWindow 覆盖结果" MODIFIED="1690869895625" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UI" />
-    <SUITE FILE_PATH="coverage/DicomViewer$main.coverage" NAME="main 覆盖结果" MODIFIED="1690904275707" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/DicomViewer$main.coverage" NAME="main 覆盖结果" MODIFIED="1691051128726" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/DicomViewer$testQt.coverage" NAME="testQt 覆盖结果" MODIFIED="1690437738660" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/DicomViewer$dicomUtil.coverage" NAME="dicomUtil 覆盖结果" MODIFIED="1690815591831" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/DicomViewer$colorPicker.coverage" NAME="colorPicker 覆盖结果" MODIFIED="1690816594624" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UI" />

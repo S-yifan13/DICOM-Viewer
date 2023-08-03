@@ -72,6 +72,7 @@ class Dicom:
             self.bits_stored = dataset.BitsStored
 
             self.image_type = dataset.ImageType
+            self.frame_count = self.pixel_array.shape[0]
 
         except (pydicom.errors.InvalidDicomError, FileNotFoundError, ValueError) as e:
             error_msg = str(e)

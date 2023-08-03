@@ -25,6 +25,9 @@ def showCertainImage(label, pixel_array):
 
 
 class Ui_MainWindow(object):
+    def __init__(self):
+        self.dicomFile = None
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1835, 980)
@@ -351,6 +354,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.colorPickerTrigger.clicked.connect(self.clickColorPickerTrigger)  # 颜色选择器
+        self.pushButton.clicked.connect(self.toFrame)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def clickColorPickerTrigger(self):
@@ -364,6 +368,7 @@ class Ui_MainWindow(object):
         if file_path:
             print("选择的文件路径：", file_path)
             dicomFile = Dicom(file_path)
+            self.dicomFile = dicomFile
             self.showInfo(dicomFile)
             self.showImage(dicomFile)
 
@@ -371,10 +376,17 @@ class Ui_MainWindow(object):
         pass
 
     def showImage(self, dicomFile):
+        self.frameIndexSpinBox.setRange(1, dicomFile.frame_count)
         self.tImage.frames = dicomFile.pixelAllTransverse()
+        self.tImage.setSlider(self.frameIndexSlider, dicomFile.frame_count)
         self.tImage.showCurrentImage()
+        self.tImage.setLabel(self.frameIndexLable)
         showCertainImage(self.sImage, dicomFile.pixelSagittal())
         showCertainImage(self.cImage, dicomFile.pixelCoronal())
+
+    def toFrame(self):
+        if self.dicomFile:
+            self.tImage.setFrameIndex(self.frameIndexSpinBox.value())
 
     def showInfo(self, dicomFile):
         patient = dicomFile.patient

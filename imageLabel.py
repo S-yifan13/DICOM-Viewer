@@ -9,6 +9,8 @@ class ImageLabel(QLabel):
         self.frames = []
         self.frame_index = 0
         self.setScaledContents(True)
+        self.slider = None
+        self.label = None
 
     def wheelEvent(self, event):
         frame_count = self.frames.shape[0]
@@ -18,10 +20,11 @@ class ImageLabel(QLabel):
             self.frame_index += delta
             self.frame_index = max(0, min(self.frame_index, frame_count - 1))
             self.showCurrentImage()
+            self.update()
 
     def showCurrentImage(self):
         # 显示当前帧
-        if self.frame_index < self.frames.shape[0]:
+        if 0 <= self.frame_index < self.frames.shape[0]:
             pixel_array = self.frames[self.frame_index]
             height, width, channel = pixel_array.shape
             bytes_per_line = 3 * width
@@ -29,3 +32,29 @@ class ImageLabel(QLabel):
             pixmap = QPixmap.fromImage(image)
             # self.setPixmap(pixmap.scaled(self.size(), aspectRatioMode=Qt.KeepAspectRatio))
             self.setPixmap(pixmap)
+
+        elif self.frame_index < 0:
+            self.frame_index = 0
+
+        else:
+            self.frame_index = self.frames.shape[0] - 1
+
+    def update(self):
+        if self.slider is not None:
+            self.slider.setValue(self.frame_index)
+        if self.label is not None:
+            self.label.setText(str(self.frame_index + 1))
+
+    def setSlider(self, slider, max_value):
+        self.slider = slider
+        self.slider.setRange(0, max_value - 1)
+        self.slider.valueChanged.connect(self.setFrameIndex)
+
+    def setLabel(self, label):
+        self.label = label
+        self.label.setText(str(self.frame_index + 1))
+
+    def setFrameIndex(self, frame_index):
+        self.frame_index = frame_index
+        self.update()
+        self.showCurrentImage()
