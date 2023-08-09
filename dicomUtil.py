@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication, QMessageBox
 
 class Patient:
     def __init__(self, name, pid, birthday, sex, age):
-        self.name = str(name.original_string)
+        self.name = name
         self.pid = pid
         self.birthday = birthday
         self.sex = sex
@@ -34,7 +34,7 @@ class Dicom:
             self.modality = dataset.Modality
 
             # 病人信息
-            self.patient = Patient(dataset.PatientName, dataset.PatientID,
+            self.patient = Patient(dataset.PatientName.alphabetic, dataset.PatientID,
                                    dataset.PatientBirthDate, dataset.PatientSex,
                                    dataset.PatientAge)
 

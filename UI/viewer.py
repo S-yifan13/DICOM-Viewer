@@ -329,8 +329,11 @@ class Ui_MainWindow(object):
         self.importFile.setObjectName("importFile")
         self.exportFile = QtWidgets.QAction(MainWindow)
         self.exportFile.setObjectName("exportFile")
+        self.uploadFile = QtWidgets.QAction(MainWindow)
+        self.uploadFile.setObjectName("uploadFile")
         self.menu.addAction(self.importFile)
         self.menu.addAction(self.exportFile)
+        self.menu.addAction(self.uploadFile)
         self.menubar.addAction(self.menu.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -370,3 +373,14 @@ class Ui_MainWindow(object):
         self.menu.setTitle(_translate("MainWindow", "文件"))
         self.importFile.setText(_translate("MainWindow", "导入"))
         self.exportFile.setText(_translate("MainWindow", "导出"))
+        self.uploadFile.setText(_translate("MainWindow", "上传"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())

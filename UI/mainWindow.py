@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+import sys
+
+import requests
+
+from UI.upload import Ui_uploadDialog
 from imageLabel import ImageLabel
 # Form implementation generated from reading ui file 'viewer.ui'
 #
@@ -348,8 +353,12 @@ class Ui_MainWindow(object):
         self.exportFile = QtWidgets.QAction(MainWindow)
         self.exportFile.setObjectName("exportFile")
         self.exportFile.triggered.connect(self.exportFileAction)
+        self.uploadFile = QtWidgets.QAction(MainWindow)
+        self.uploadFile.setObjectName("uploadFile")
+        self.uploadFile.triggered.connect(self.uploadFileAction)
         self.menu.addAction(self.importFile)
         self.menu.addAction(self.exportFile)
+        self.menu.addAction(self.uploadFile)
         self.menubar.addAction(self.menu.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -374,6 +383,17 @@ class Ui_MainWindow(object):
 
     def exportFileAction(self):
         pass
+
+    def uploadFileAction(self):
+        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "选择文件", "", "All Files (*)")
+        if file_path:
+            print("选择的文件路径：", file_path)
+            upload_dialog = QtWidgets.QDialog(self)
+            ui = Ui_uploadDialog()
+            ui.setupUi(upload_dialog)
+            ui.upload_file(file_path=file_path, url='http://127.0.0.1:8000/api/storeDicom')
+            upload_dialog.exec_()
+
 
     def showImage(self, dicomFile):
         self.frameIndexSpinBox.setRange(1, dicomFile.frame_count)
@@ -436,3 +456,4 @@ class Ui_MainWindow(object):
         self.menu.setTitle(_translate("MainWindow", "文件"))
         self.importFile.setText(_translate("MainWindow", "导入"))
         self.exportFile.setText(_translate("MainWindow", "导出"))
+        self.uploadFile.setText(_translate("MainWindow", "上传"))

@@ -766,6 +766,7 @@
     </property>
     <addaction name="importFile"/>
     <addaction name="exportFile"/>
+    <addaction name="uploadFile"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -778,6 +779,11 @@
   <action name="exportFile">
    <property name="text">
     <string>导出</string>
+   </property>
+  </action>
+  <action name="uploadFile">
+   <property name="text">
+    <string>上传</string>
    </property>
   </action>
  </widget>
