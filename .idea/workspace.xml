@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08dbc0ef-a229-4837-bd77-8c507d1f8862" name="更改" comment="add: 滑动条及输入跳转帧">
-      <change beforePath="$PROJECT_DIR$/.idea/DicomViewer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DicomViewer.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/image.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/image.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/mainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/mainWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/viewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/viewer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/viewer.ui" beforeDir="false" afterPath="$PROJECT_DIR$/UI/viewer.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dicomUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/dicomUtil.py" afterDir="false" />
-    </list>
+    <list default="true" id="08dbc0ef-a229-4837-bd77-8c507d1f8862" name="更改" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -156,6 +147,9 @@
       <module name="DicomViewer" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UI" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -205,7 +199,7 @@
       <workItem from="1691481848916" duration="3928000" />
       <workItem from="1691504015979" duration="5181000" />
       <workItem from="1691561936523" duration="3957000" />
-      <workItem from="1691567963546" duration="13522000" />
+      <workItem from="1691567963546" duration="13563000" />
     </task>
     <task id="LOCAL-00001" summary="add: dicom类，信息读取、绘制三视图">
       <created>1690789206776</created>
@@ -235,7 +229,15 @@
       <option name="project" value="LOCAL" />
       <updated>1691051381395</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="add: 大文件上传试验，及uploadDialog">
+      <option name="closed" value="true" />
+      <created>1691600023585</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1691600023585</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -246,7 +248,8 @@
     <MESSAGE value="add: UI重建，dicom三视图及病人信息显示(有bug)" />
     <MESSAGE value="fix: 三视图bug解决; add: 滚轮切换帧" />
     <MESSAGE value="add: 滑动条及输入跳转帧" />
-    <option name="LAST_COMMIT_MESSAGE" value="add: 滑动条及输入跳转帧" />
+    <MESSAGE value="add: 大文件上传试验，及uploadDialog" />
+    <option name="LAST_COMMIT_MESSAGE" value="add: 大文件上传试验，及uploadDialog" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
