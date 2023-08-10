@@ -86,6 +86,12 @@ class Dicom:
     def pixelAllTransverse(self):
         return self.pixel_array[:, :self.transverseMaxY, :, :]
 
+    def frame2Png(self, frame_index, target_path):
+        transverse_view = self.pixel_array[frame_index]
+        transverse_view = cv2.cvtColor(transverse_view, cv2.COLOR_RGB2BGR)
+        cv2.imwrite(target_path, transverse_view)
+        print('save_to_png: ' + target_path)
+
     def pixelTransverse(self, frame_index):
         if frame_index < 0 or frame_index >= self.pixel_array.shape[0]:
             raise ValueError('frame_index out of range.')
