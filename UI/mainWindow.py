@@ -5,6 +5,7 @@ import requests
 
 from UI.checkColorWidget import CheckColorWidget
 from UI.upload import Ui_uploadDialog, UploadDialog
+from callModel import getCheckPrediction
 from imageLabel import ImageLabel
 # Form implementation generated from reading ui file 'viewer.ui'
 #
@@ -72,87 +73,6 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.secondControl)
         self.thirdControl = CheckColorWidget(self.showControl, '第三类病灶')
         self.verticalLayout.addWidget(self.thirdControl)
-
-        # self.firstControl = QtWidgets.QWidget(self.showControl)
-        # self.firstControl.setObjectName("firstControl")
-        # self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.firstControl)
-        # self.horizontalLayout_4.setContentsMargins(5, 0, 5, 0)
-        # self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        # self.checkBox = QtWidgets.QCheckBox(self.firstControl)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.checkBox.sizePolicy().hasHeightForWidth())
-        # self.checkBox.setSizePolicy(sizePolicy)
-        # self.checkBox.setObjectName("checkBox")
-        # self.horizontalLayout_4.addWidget(self.checkBox)
-        # self.firstColor = QtWidgets.QPushButton(self.firstControl)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.firstColor.sizePolicy().hasHeightForWidth())
-        # self.firstColor.setSizePolicy(sizePolicy)
-        # self.firstColor.setMinimumSize(QtCore.QSize(25, 0))
-        # self.firstColor.setMaximumSize(QtCore.QSize(25, 25))
-        # self.firstColor.setBaseSize(QtCore.QSize(0, 0))
-        # self.firstColor.setText("")
-        # self.firstColor.setObjectName("firstColor")
-        # self.horizontalLayout_4.addWidget(self.firstColor)
-        # self.verticalLayout.addWidget(self.firstControl)
-
-        # self.secondControl = QtWidgets.QWidget(self.showControl)
-        # self.secondControl.setObjectName("secondControl")
-        # self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.secondControl)
-        # self.horizontalLayout_5.setContentsMargins(5, 0, 5, 0)
-        # self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        # self.checkBox_5 = QtWidgets.QCheckBox(self.secondControl)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.checkBox_5.sizePolicy().hasHeightForWidth())
-        # self.checkBox_5.setSizePolicy(sizePolicy)
-        # self.checkBox_5.setObjectName("checkBox_5")
-        # self.horizontalLayout_5.addWidget(self.checkBox_5)
-        # self.secondColor = QtWidgets.QPushButton(self.secondControl)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.secondColor.sizePolicy().hasHeightForWidth())
-        # self.secondColor.setSizePolicy(sizePolicy)
-        # self.secondColor.setMinimumSize(QtCore.QSize(25, 0))
-        # self.secondColor.setMaximumSize(QtCore.QSize(25, 25))
-        # self.secondColor.setBaseSize(QtCore.QSize(0, 0))
-        # self.secondColor.setText("")
-        # self.secondColor.setObjectName("secondColor")
-        # self.horizontalLayout_5.addWidget(self.secondColor)
-        # self.verticalLayout.addWidget(self.secondControl)
-
-        # self.thirdControl = QtWidgets.QWidget(self.showControl)
-        # self.thirdControl.setObjectName("thirdControl")
-        # self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.thirdControl)
-        # self.horizontalLayout_6.setContentsMargins(5, 0, 5, 0)
-        # self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        # self.checkBox_6 = QtWidgets.QCheckBox(self.thirdControl)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.checkBox_6.sizePolicy().hasHeightForWidth())
-        # self.checkBox_6.setSizePolicy(sizePolicy)
-        # self.checkBox_6.setObjectName("checkBox_6")
-        # self.horizontalLayout_6.addWidget(self.checkBox_6)
-        # self.pushButton_5 = QtWidgets.QPushButton(self.thirdControl)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.pushButton_5.sizePolicy().hasHeightForWidth())
-        # self.pushButton_5.setSizePolicy(sizePolicy)
-        # self.pushButton_5.setMinimumSize(QtCore.QSize(25, 0))
-        # self.pushButton_5.setMaximumSize(QtCore.QSize(25, 25))
-        # self.pushButton_5.setBaseSize(QtCore.QSize(0, 0))
-        # self.pushButton_5.setText("")
-        # self.pushButton_5.setObjectName("pushButton_5")
-        # self.horizontalLayout_6.addWidget(self.pushButton_5)
-        # self.verticalLayout.addWidget(self.thirdControl)
 
         self.checkBox_2 = QtWidgets.QCheckBox(self.showControl)
         self.checkBox_2.setObjectName("checkBox_2")
@@ -231,15 +151,15 @@ class Ui_MainWindow(object):
         self.label_5.setStyleSheet("fontsize: 15px; font-weight: bold")
         self.label_5.setObjectName("label_5")
         self.verticalLayout_2.addWidget(self.label_5)
-        self.radioButton = QtWidgets.QRadioButton(self.modelChoose)
-        self.radioButton.setObjectName("radioButton")
-        self.verticalLayout_2.addWidget(self.radioButton)
-        self.radioButton_2 = QtWidgets.QRadioButton(self.modelChoose)
-        self.radioButton_2.setObjectName("radioButton_2")
-        self.verticalLayout_2.addWidget(self.radioButton_2)
-        self.pushButton_2 = QtWidgets.QPushButton(self.modelChoose)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.verticalLayout_2.addWidget(self.pushButton_2)
+        self.checkModel = QtWidgets.QRadioButton(self.modelChoose)
+        self.checkModel.setObjectName("checkModel")
+        self.verticalLayout_2.addWidget(self.checkModel)
+        self.segmentationModel = QtWidgets.QRadioButton(self.modelChoose)
+        self.segmentationModel.setObjectName("segmentationModel")
+        self.verticalLayout_2.addWidget(self.segmentationModel)
+        self.callModelButton = QtWidgets.QPushButton(self.modelChoose)
+        self.callModelButton.setObjectName("callModelButton")
+        self.verticalLayout_2.addWidget(self.callModelButton)
         spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem1)
         self.Info = QtWidgets.QFrame(self.centralwidget)
@@ -452,6 +372,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.colorPickerTrigger.clicked.connect(self.clickColorPickerTrigger)  # 颜色选择器
         self.pushButton.clicked.connect(self.toFrame)
+        self.callModelButton.clicked.connect(self.callModel)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def clickColorPickerTrigger(self):
@@ -494,6 +415,25 @@ class Ui_MainWindow(object):
         if self.dicomFile:
             self.tImage.setFrameIndex(self.frameIndexSpinBox.value())
 
+    def callModel(self):
+        if self.dicomFile is None:
+            return
+        if self.checkModel.isChecked():
+            frame_index = self.tImage.frame_index
+            predictions = getCheckPrediction(frame_index, self.dicomFile)
+            self.firstControl.setPrediction(predictions[0])
+            self.firstControl.setTImage(self.tImage)
+            self.secondControl.setPrediction(predictions[1])
+            self.secondControl.setTImage(self.tImage)
+            self.thirdControl.setPrediction(predictions[2])
+            self.thirdControl.setTImage(self.tImage)
+            pass
+
+        elif self.segmentationModel.isChecked():
+            pass
+        else:
+            pass
+
     def showInfo(self, dicomFile):
         patient = dicomFile.patient
         self.name.setText("姓名：" + patient.name)
@@ -513,9 +453,6 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "显示控制区"))
         self.label_7.setText(_translate("MainWindow", "检测结果病灶显示："))
-        # self.checkBox.setText(_translate("MainWindow", "第一类病灶"))
-        # self.checkBox_5.setText(_translate("MainWindow", "第二类病灶"))
-        # self.checkBox_6.setText(_translate("MainWindow", "第三类病灶"))
         self.checkBox_2.setText(_translate("MainWindow", "显示病灶名称"))
         self.label_2.setText(_translate("MainWindow", "病灶透明度"))
         self.label_3.setText(_translate("MainWindow", "病灶颜色"))
@@ -523,9 +460,9 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "当前帧数"))
         self.pushButton.setText(_translate("MainWindow", "跳转到帧"))
         self.label_5.setText(_translate("MainWindow", "模型选择区"))
-        self.radioButton.setText(_translate("MainWindow", "检测算法"))
-        self.radioButton_2.setText(_translate("MainWindow", "分割算法"))
-        self.pushButton_2.setText(_translate("MainWindow", "确定调用"))
+        self.checkModel.setText(_translate("MainWindow", "检测算法"))
+        self.segmentationModel.setText(_translate("MainWindow", "分割算法"))
+        self.callModelButton.setText(_translate("MainWindow", "确定调用"))
         self.label_6.setText(_translate("MainWindow", "病人信息"))
         self.pid.setText(_translate("MainWindow", "ID"))
         self.name.setText(_translate("MainWindow", "姓名"))

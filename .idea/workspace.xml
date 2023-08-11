@@ -4,16 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08dbc0ef-a229-4837-bd77-8c507d1f8862" name="更改" comment="add: 大文件上传试验，及uploadDialog">
-      <change afterPath="$PROJECT_DIR$/UI/checkColorWidget.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="08dbc0ef-a229-4837-bd77-8c507d1f8862" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/callModel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/checkColorWidget.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/checkColorWidget.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/image.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/image.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/mainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/mainWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/upload.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/upload.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/viewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/viewer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/viewer.ui" beforeDir="false" afterPath="$PROJECT_DIR$/UI/viewer.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dicomUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/dicomUtil.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fileUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/fileUtil.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/imageLabel.py" beforeDir="false" afterPath="$PROJECT_DIR$/imageLabel.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,7 +209,8 @@
       <workItem from="1691504015979" duration="5181000" />
       <workItem from="1691561936523" duration="3957000" />
       <workItem from="1691567963546" duration="13563000" />
-      <workItem from="1691650145372" duration="15292000" />
+      <workItem from="1691650145372" duration="23178000" />
+      <workItem from="1691740742037" duration="299000" />
     </task>
     <task id="LOCAL-00001" summary="add: dicom类，信息读取、绘制三视图">
       <created>1690789206776</created>
@@ -256,7 +256,15 @@
       <option name="project" value="LOCAL" />
       <updated>1691650184698</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="add: 大文件上传完成，显示控制更改">
+      <option name="closed" value="true" />
+      <created>1691681328442</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1691681328442</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -268,26 +276,12 @@
     <MESSAGE value="fix: 三视图bug解决; add: 滚轮切换帧" />
     <MESSAGE value="add: 滑动条及输入跳转帧" />
     <MESSAGE value="add: 大文件上传试验，及uploadDialog" />
-    <option name="LAST_COMMIT_MESSAGE" value="add: 大文件上传试验，及uploadDialog" />
+    <MESSAGE value="add: 大文件上传完成，显示控制更改" />
+    <option name="LAST_COMMIT_MESSAGE" value="add: 大文件上传完成，显示控制更改" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/imageLabel.py</url>
-          <line>14</line>
-          <option name="timeStamp" value="39" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/imageLabel.py</url>
-          <line>48</line>
-          <option name="timeStamp" value="41" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/imageLabel.py</url>
-          <line>26</line>
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/url.py</url>
           <line>61</line>
@@ -302,6 +296,16 @@
           <url>file://$PROJECT_DIR$/UI/upload.py</url>
           <line>65</line>
           <option name="timeStamp" value="54" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/imageLabel.py</url>
+          <line>71</line>
+          <option name="timeStamp" value="60" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/UI/checkColorWidget.py</url>
+          <line>62</line>
+          <option name="timeStamp" value="61" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -321,6 +325,6 @@
     <SUITE FILE_PATH="coverage/DicomViewer$mainWindow.coverage" NAME="mainWindow 覆盖结果" MODIFIED="1690869895625" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UI" />
     <SUITE FILE_PATH="coverage/DicomViewer$colorPicker.coverage" NAME="colorPicker 覆盖结果" MODIFIED="1690816594624" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UI" />
     <SUITE FILE_PATH="coverage/DicomViewer$url.coverage" NAME="url 覆盖结果" MODIFIED="1691594647899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/DicomViewer$main.coverage" NAME="main 覆盖结果" MODIFIED="1691681191562" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/DicomViewer$main.coverage" NAME="main 覆盖结果" MODIFIED="1691690092058" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

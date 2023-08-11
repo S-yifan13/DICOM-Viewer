@@ -1,5 +1,6 @@
 from PyQt5 import QtCore
-from PyQt5.QtCore import QRect, QSize
+from PyQt5.QtCore import QRect, QSize, Qt
+from PyQt5.QtGui import QPen, QPainter
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QCheckBox, QSizePolicy, QPushButton, QColorDialog
 
 
@@ -32,13 +33,15 @@ class Ui_CheckColorWidget(object):
 
 
 class CheckColorWidget(QWidget):
-    def __init__(self, parent=None, check_box_text=""):
+    def __init__(self, parent=None, check_box_text="", tImage=None):
         super().__init__(parent)
         self.ui = Ui_CheckColorWidget()
         self.ui.setupUi(self, check_box_text)
+        self.tImage = tImage
         self.prediction = None
-        self.color = None
+        self.color = Qt.white
         self.ui.pushButton.clicked.connect(self.chooseColor)
+        self.ui.checkBox.stateChanged.connect(self.checkChange)
 
     def setPrediction(self, prediction):
         self.prediction = prediction
@@ -49,4 +52,19 @@ class CheckColorWidget(QWidget):
             self.ui.pushButton.setStyleSheet("background-color: rgb({},{},{});".format(color.red(), color.green(), color.blue()))
             self.color = color
 
+    def setPrediction(self, prediction):
+        self.prediction = prediction
 
+    def setTImage(self, tImage):
+        self.tImage = tImage
+
+    def checkChange(self):
+        if self.ui.checkBox.isChecked() and self.prediction is not None:
+            self.tImage.showCheckPrediction(self.prediction, self.color)
+            pen = QPen(self.color)
+            pixmap = self.tImage.pixmap()
+            painter = QPainter(pixmap)
+            painter.setPen(pen)
+            painter.drawRect(10, 10, 100, 100)
+            painter.end()
+            self.tImage.setPixmap(pixmap)

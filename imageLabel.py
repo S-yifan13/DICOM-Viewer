@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QLabel, QApplication
-from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtGui import QImage, QPixmap, QPen, QPainter
 import numpy as np
 
 class ImageLabel(QLabel):
@@ -35,9 +35,13 @@ class ImageLabel(QLabel):
 
         elif self.frame_index < 0:
             self.frame_index = 0
+            self.showCurrentImage()
+            self.update()
 
         else:
             self.frame_index = self.frames.shape[0] - 1
+            self.showCurrentImage()
+            self.update()
 
     def update(self):
         if self.slider is not None:
@@ -58,3 +62,12 @@ class ImageLabel(QLabel):
         self.frame_index = frame_index
         self.update()
         self.showCurrentImage()
+
+    def showCheckPrediction(self, prediction, color):
+        pen = QPen(color)
+        pixmap = self.pixmap().copy()
+        painter = QPainter(pixmap)
+        painter.setPen(pen)
+        painter.drawRect(10, 10, 100, 100)
+        painter.end()
+        self.setPixmap(pixmap)
