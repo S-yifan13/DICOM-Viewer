@@ -6,3 +6,7 @@ SEGMENTATION_MODEL_URL = 'http://'
 # path
 TEMP_DIR = 'temp'
 DATA_DIR = 'data'
+
+# args
+MIN_CHECK_SHOW_RATIO = 0.7
+IMAGE_WIDTH = 615

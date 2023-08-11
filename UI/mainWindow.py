@@ -6,6 +6,7 @@ import requests
 from UI.checkColorWidget import CheckColorWidget
 from UI.upload import Ui_uploadDialog, UploadDialog
 from callModel import getCheckPrediction
+from config import IMAGE_WIDTH
 from imageLabel import ImageLabel
 # Form implementation generated from reading ui file 'viewer.ui'
 #
@@ -67,11 +68,11 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.label_7)
 
         # 检测病灶显示控制
-        self.firstControl = CheckColorWidget(self.showControl, '第一类病灶')
+        self.firstControl = CheckColorWidget(self.showControl, '第一类病灶', index=0)
         self.verticalLayout.addWidget(self.firstControl)
-        self.secondControl = CheckColorWidget(self.showControl, '第二类病灶')
+        self.secondControl = CheckColorWidget(self.showControl, '第二类病灶', index=1)
         self.verticalLayout.addWidget(self.secondControl)
-        self.thirdControl = CheckColorWidget(self.showControl, '第三类病灶')
+        self.thirdControl = CheckColorWidget(self.showControl, '第三类病灶', index=2)
         self.verticalLayout.addWidget(self.thirdControl)
 
         self.checkBox_2 = QtWidgets.QCheckBox(self.showControl)
@@ -247,10 +248,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.addItem(spacerItem3)
         # self.tImage = QtWidgets.QLabel(self.transverse)
         self.tImage = ImageLabel(self.transverse)
-        self.tImage.setMaximumSize(QtCore.QSize(615, 350))
+        # self.tImage.setMaximumSize(QtCore.QSize(615, 350))
         self.tImage.setText("")
         self.tImage.setObjectName("tImage")
         self.verticalLayout_4.addWidget(self.tImage)
+        self.firstControl.setTImage(self.tImage)
+        self.secondControl.setTImage(self.tImage)
+        self.thirdControl.setTImage(self.tImage)
         spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem4)
         self.gridLayout.addWidget(self.transverse, 0, 0, 1, 1)
@@ -403,6 +407,8 @@ class Ui_MainWindow(object):
 
 
     def showImage(self, dicomFile):
+        self.tImage.scale = IMAGE_WIDTH /dicomFile.rows
+
         self.frameIndexSpinBox.setRange(1, dicomFile.frame_count)
         self.tImage.frames = dicomFile.pixelAllTransverse()
         self.tImage.setSlider(self.frameIndexSlider, dicomFile.frame_count)
@@ -421,13 +427,7 @@ class Ui_MainWindow(object):
         if self.checkModel.isChecked():
             frame_index = self.tImage.frame_index
             predictions = getCheckPrediction(frame_index, self.dicomFile)
-            self.firstControl.setPrediction(predictions[0])
-            self.firstControl.setTImage(self.tImage)
-            self.secondControl.setPrediction(predictions[1])
-            self.secondControl.setTImage(self.tImage)
-            self.thirdControl.setPrediction(predictions[2])
-            self.thirdControl.setTImage(self.tImage)
-            pass
+            self.tImage.setPredictions(predictions)
 
         elif self.segmentationModel.isChecked():
             pass
