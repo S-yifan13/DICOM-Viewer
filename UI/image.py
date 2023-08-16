@@ -1,53 +1,69 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QLabel, QApplication, QMainWindow, QVBoxLayout, QWidget, QCheckBox
-from PyQt5.QtGui import QImage, QPixmap, QPen, QPainter
-import numpy as np
+from PyQt5.QtGui import QTransform, QPixmap
+from PyQt5.QtWidgets import QApplication, QLabel, QVBoxLayout, QWidget
 
 
-class ImageLabel(QLabel):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.draw_box = False
-        self.box_color = Qt.red
-        self.setScaledContents(True)
-        pixmap = QPixmap('../temp/data.png')
-        self.setPixmap(pixmap)
-
-    def paintEvent(self, event):
-        super().paintEvent(event)
-        if self.draw_box:
-            painter = QPainter(self)
-            pen = QPen(self.box_color)
-            painter.setPen(pen)
-            painter.drawRect(10, 10, 100, 100)
-
-
-class MainWindow(QMainWindow):
+class ZoomableLabel(QLabel):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Drawing Example")
+        # 设置初始的缩放级别
+        self.scale_factor = 1.0
 
-        self.image_label = ImageLabel()
-        self.setCentralWidget(QWidget())
-        layout = QVBoxLayout(self.centralWidget())
-        self.checkbox = QCheckBox("显示方框")
-        self.checkbox.stateChanged.connect(self.toggleDrawBox)
-        layout.addWidget(self.checkbox)
-        layout.addWidget(self.image_label)
+    def wheelEvent(self, event):
+        # 获取鼠标滚轮的滚动方向
+        delta = event.angleDelta().y()
 
-
-
-    def toggleDrawBox(self, state):
-        if state == Qt.Checked:
-            self.image_label.draw_box = True
+        # 根据滚动方向进行缩放
+        if delta > 0:
+            self.zoom(1.1)
         else:
-            self.image_label.draw_box = False
-        self.image_label.update()
+            self.zoom(0.9)
+
+    def zoom(self, scale_factor):
+        # 限制缩放级别的上下限
+        min_scale = 0.1
+        max_scale = 10.0
+        new_scale_factor = self.scale_factor * scale_factor
+        new_scale_factor = max(min(new_scale_factor, max_scale), min_scale)
+
+        # 更新缩放级别
+        self.scale_factor = new_scale_factor
+
+        # 获取当前的 pixmap
+        current_pixmap = self.pixmap()
+
+        if current_pixmap is not None:
+            # 进行缩放
+            scaled_pixmap = current_pixmap.transformed(QTransform().scale(new_scale_factor, new_scale_factor),
+                                                       Qt.SmoothTransformation)
+
+            # 设置缩放后的 pixmap
+            self.setPixmap(scaled_pixmap)
 
 
 if __name__ == '__main__':
     app = QApplication([])
-    window = MainWindow()
-    window.setGeometry(500, 200, 400, 300)
+
+    # 创建一个QWidget作为主窗口
+    window = QWidget()
+
+    # 创建一个ZoomableLabel用于显示图片并响应滚轮事件
+    label = ZoomableLabel()
+
+    # 加载原始图片
+    pixmap = QPixmap('../temp/data.png')
+
+    # 设置初始的pixmap
+    label.setPixmap(pixmap)
+
+    # 创建一个垂直布局，并将 ZoomableLabel 添加到其中
+    layout = QVBoxLayout()
+    layout.addWidget(label)
+
+    # 设置主窗口的布局
+    window.setLayout(layout)
+
+    # 显示主窗口
     window.show()
+
     app.exec_()

@@ -56,6 +56,7 @@ class Dicom:
             # 横截面起始Y坐标
             self.transverseMaxY = regions[0].RegionLocationMaxY1
             self.transverseMinY = regions[0].RegionLocationMinY0
+            self.transverseHeight = self.transverseMaxY - self.transverseMinY + 1
 
             # 纵截面起始X坐标
             self.longitudinalMinX = regions[1].RegionLocationMinX0
@@ -63,6 +64,7 @@ class Dicom:
             # 纵截面起始X坐标
             self.longitudinalMaxY = regions[1].RegionLocationMaxY1
             self.longitudinalMinY = regions[1].RegionLocationMinY0
+            self.longitudinalHeight = self.longitudinalMaxY - self.longitudinalMinY + 1
 
             # 保存像素数据
             self.pixel_array = dataset.pixel_array
@@ -89,7 +91,12 @@ class Dicom:
     def frame2Png(self, frame_index, target_path):
         if frame_index < 0 or frame_index >= self.pixel_array.shape[0]:
             raise ValueError('frame_index out of range.')
-        transverse_view = self.pixel_array[frame_index]
+        transverse_view = self.pixel_array[
+                          frame_index,
+                          :self.transverseMaxY,
+                          self.transverseMinX: self.transverseMaxX,
+                          :
+                          ]
         transverse_view = cv2.cvtColor(transverse_view, cv2.COLOR_RGB2BGR)
         cv2.imwrite(target_path, transverse_view)
         print('save_to_png: ' + target_path)
@@ -114,13 +121,14 @@ class Dicom:
 
     def resizeXY(self, data):
         x = self.longitudinalMaxX - self.longitudinalMinX + 1
-        y = self.longitudinalMaxY - self.longitudinalMinY + 1
+        y = self.longitudinalHeight
         data_resized = cv2.resize(data, (x, y))
         return data_resized
 
     def grey2rgb(self, data):
         cmap = plt.get_cmap('afmhot')
         return cmap(data)
+
     def showImage(self):
         plt.imshow(self.pixelTransverse(0))
         plt.title('Transverse')
@@ -131,7 +139,6 @@ class Dicom:
         plt.imshow(self.pixelCoronal())
         plt.title('Coronal')
 
-
 # if __name__ == '__main__':
 #     dicom = Dicom('data/data')
 #     print(dicom.patient)
@@ -140,6 +147,3 @@ class Dicom:
 #     dicom.showTransverse(1)
 #     dicom.showSagittal()
 #     dicom.showCoronal()
-
-
-

@@ -58,3 +58,4 @@ class CheckColorWidget(QWidget):
             self.tImage.showCheckPrediction(self.index)
         else:
             self.tImage.hideCheckPrediction(self.index)
+

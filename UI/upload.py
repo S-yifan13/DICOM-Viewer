@@ -12,6 +12,9 @@ import requests
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from UI.progressDialog import Ui_progressDialog
+
+
 class UploadThread(QtCore.QThread):
     progress_update = QtCore.pyqtSignal(float)
 
@@ -48,13 +51,13 @@ class UploadThread(QtCore.QThread):
                 if response.status_code != 200:
                     print(f"上传分片 {chunk_number} 失败")
                     self.progress_update.emit(-1)
-                    # self.setUploadStateLabel("上传失败")
+                    # self.setLabel("上传失败")
                 else:
                     print(f"上传分片 {chunk_number} 成功")
                     to_emit = min(chunk_number / total_chunks * 100, 99.99)
                     self.progress_update.emit(to_emit)
-                    # self.setUploadStateLabel("上传中……请耐心等待")
-                    # self.setUploadProgressBar(chunk_number / total_chunks * 100)
+                    # self.setLabel("上传中……请耐心等待")
+                    # self.setProgressBar(chunk_number / total_chunks * 100)
 
         # 通知上传完成
         params = {
@@ -65,57 +68,20 @@ class UploadThread(QtCore.QThread):
         if response.status_code == 200 and response.json()['errno'] == 200:
             print("通知上传完成成功")
             self.progress_update.emit(100)
-            # self.setUploadStateLabel("上传完成!")
-            # self.setUploadProgressBar(100)
+            # self.setLabel("上传完成!")
+            # self.setProgressBar(100)
 
         else:
             print("通知上传完成失败")
             self.progress_update.emit(-1)
 
-class Ui_uploadDialog(object):
-
-    def setupUi(self, upload_dialog):
-        upload_dialog.setObjectName("uploadDialog")
-        upload_dialog.resize(428, 200)
-        self.horizontalLayout = QtWidgets.QHBoxLayout(upload_dialog)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setContentsMargins(20, -1, 20, -1)
-        self.verticalLayout.setObjectName("verticalLayout")
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem)
-        self.uploadStateLabel = QtWidgets.QLabel(upload_dialog)
-        self.uploadStateLabel.setText("")
-        self.uploadStateLabel.setObjectName("uploadStateLabel")
-        self.verticalLayout.addWidget(self.uploadStateLabel)
-        self.uploadProgressBar = QtWidgets.QProgressBar(upload_dialog)
-        self.uploadProgressBar.setProperty("value", 0)
-        self.uploadProgressBar.setObjectName("uploadProgressBar")
-        self.verticalLayout.addWidget(self.uploadProgressBar)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem1)
-        self.horizontalLayout.addLayout(self.verticalLayout)
-
-        self.retranslateUi(upload_dialog)
-        QtCore.QMetaObject.connectSlotsByName(upload_dialog)
-
-    def setUploadStateLabel(self, text):
-        self.uploadStateLabel.setText(text)
-
-    def setUploadProgressBar(self, value):
-        self.uploadProgressBar.setValue(value)
-
-    def retranslateUi(self, uploadDialog):
-        _translate = QtCore.QCoreApplication.translate
-        uploadDialog.setWindowTitle(_translate("uploadDialog", "Dialog"))
 
 class UploadDialog(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.thread = None
-        self.ui = Ui_uploadDialog()
+        self.ui = Ui_progressDialog()
         self.ui.setupUi(self)
-        self.ui.uploadProgressBar.setValue(0)
 
     def start_upload(self, file_path, url):
         self.thread = UploadThread(file_path, url)
@@ -125,22 +91,14 @@ class UploadDialog(QtWidgets.QDialog):
     
     def update_progress(self, value):
         if value == -1:
-            self.ui.setUploadStateLabel("上传失败")
+            self.ui.setLabel("上传失败")
         elif value == 100:
-            self.ui.setUploadStateLabel("上传完成!")
-            self.ui.setUploadProgressBar(100)
+            self.ui.setLabel("上传完成!")
+            self.ui.setProgressBar(100)
         else:
-            self.ui.setUploadStateLabel("上传中……请耐心等待")
-            self.ui.setUploadProgressBar(value)
+            self.ui.setLabel("上传中……请耐心等待")
+            self.ui.setProgressBar(value)
 
     def upload_finished(self):
         print("Upload finished")
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    uploadDialog = QtWidgets.QDialog()
-    ui = Ui_uploadDialog()
-    ui.setupUi(uploadDialog)
-    uploadDialog.show()
-    sys.exit(app.exec_())

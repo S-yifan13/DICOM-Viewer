@@ -4,8 +4,9 @@ import sys
 import requests
 
 from UI.checkColorWidget import CheckColorWidget
-from UI.upload import Ui_uploadDialog, UploadDialog
-from callModel import getCheckPrediction
+from UI.imageViewer import ImageViewDialog
+from UI.upload import UploadDialog
+from checkDialog import CheckDialog
 from config import IMAGE_WIDTH
 from imageLabel import ImageLabel
 # Form implementation generated from reading ui file 'viewer.ui'
@@ -18,9 +19,10 @@ from imageLabel import ImageLabel
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtWidgets import QColorDialog
+from PyQt5.QtWidgets import QColorDialog, QLabel
 
 from dicomUtil import Dicom
+from scImageLabel import SCImageLabel
 
 
 def showCertainImage(label, pixel_array):
@@ -31,6 +33,14 @@ def showCertainImage(label, pixel_array):
     pixmap = QPixmap.fromImage(image)
     label.setPixmap(pixmap)
 
+def imageView(image_label):
+    imageViewer = ImageViewDialog()
+    if type(image_label) is QPixmap:
+        imageViewer.setPixmap(image_label)
+    elif type(image_label) is QLabel:
+        pixmap = image_label.pixmap().copy()
+        imageViewer.setPixmap(pixmap)
+    imageViewer.exec_()
 
 class Ui_MainWindow(object):
     def __init__(self):
@@ -68,11 +78,11 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.label_7)
 
         # 检测病灶显示控制
-        self.firstControl = CheckColorWidget(self.showControl, '第一类病灶', index=0)
+        self.firstControl = CheckColorWidget(self.showControl, '第一类病灶js', index=0)
         self.verticalLayout.addWidget(self.firstControl)
-        self.secondControl = CheckColorWidget(self.showControl, '第二类病灶', index=1)
+        self.secondControl = CheckColorWidget(self.showControl, '第二类病灶kq', index=1)
         self.verticalLayout.addWidget(self.secondControl)
-        self.thirdControl = CheckColorWidget(self.showControl, '第三类病灶', index=2)
+        self.thirdControl = CheckColorWidget(self.showControl, '第三类病灶xs', index=2)
         self.verticalLayout.addWidget(self.thirdControl)
 
         self.checkBox_2 = QtWidgets.QCheckBox(self.showControl)
@@ -235,15 +245,33 @@ class Ui_MainWindow(object):
         self.transverse.setObjectName("transverse")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.transverse)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.label_18 = QtWidgets.QLabel(self.transverse)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.widget_4 = QtWidgets.QWidget(self.transverse)
+        self.widget_4.setObjectName("widget_4")
+        self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.widget_4)
+        self.horizontalLayout_7.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
+        self.horizontalLayout_7.setContentsMargins(-1, 0, -1, 11)
+        self.horizontalLayout_7.setSpacing(0)
+        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.label_18 = QtWidgets.QLabel(self.widget_4)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_18.sizePolicy().hasHeightForWidth())
         self.label_18.setSizePolicy(sizePolicy)
         self.label_18.setStyleSheet("color:rgb(255, 255, 255);font-weight: bold; font-size: 15;")
         self.label_18.setObjectName("label_18")
-        self.verticalLayout_4.addWidget(self.label_18)
+        self.horizontalLayout_7.addWidget(self.label_18)
+        self.viewTrans = QtWidgets.QPushButton(self.widget_4)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.viewTrans.sizePolicy().hasHeightForWidth())
+        self.viewTrans.setSizePolicy(sizePolicy)
+        self.viewTrans.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.viewTrans.setStyleSheet("color: rgb(255, 255, 255);font-weight: bold; font-size: 15;")
+        self.viewTrans.setObjectName("viewTrans")
+        self.horizontalLayout_7.addWidget(self.viewTrans)
+        self.verticalLayout_4.addWidget(self.widget_4)
         spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem3)
         # self.tImage = QtWidgets.QLabel(self.transverse)
@@ -266,19 +294,35 @@ class Ui_MainWindow(object):
         self.sagittal.setObjectName("sagittal")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.sagittal)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.label_20 = QtWidgets.QLabel(self.sagittal)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.widget_5 = QtWidgets.QWidget(self.sagittal)
+        self.widget_5.setObjectName("widget_5")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.widget_5)
+        self.horizontalLayout_8.setContentsMargins(-1, 0, -1, 11)
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.label_20 = QtWidgets.QLabel(self.widget_5)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_20.sizePolicy().hasHeightForWidth())
         self.label_20.setSizePolicy(sizePolicy)
         self.label_20.setStyleSheet("color:rgb(255, 255, 255);font-weight: bold; font-size: 15;")
         self.label_20.setObjectName("label_20")
-        self.verticalLayout_5.addWidget(self.label_20)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_5.addItem(spacerItem5)
-        self.sImage = QtWidgets.QLabel(self.sagittal)
-        self.sImage.setMaximumSize(QtCore.QSize(615, 350))
+        self.horizontalLayout_8.addWidget(self.label_20)
+        self.viewSagi = QtWidgets.QPushButton(self.widget_5)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.viewSagi.sizePolicy().hasHeightForWidth())
+        self.viewSagi.setSizePolicy(sizePolicy)
+        self.viewSagi.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.viewSagi.setStyleSheet("color: rgb(255, 255, 255);font-weight: bold; font-size: 15;")
+        self.viewSagi.setObjectName("viewSagi")
+        self.horizontalLayout_8.addWidget(self.viewSagi)
+        self.verticalLayout_5.addWidget(self.widget_5)
+        spacerItem11 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_5.addItem(spacerItem11)
+        self.sImage = SCImageLabel(self.sagittal)
+        # self.sImage.setMaximumSize(QtCore.QSize(615, 420))
         self.sImage.setText("")
         self.sImage.setObjectName("sImage")
         self.verticalLayout_5.addWidget(self.sImage)
@@ -292,8 +336,8 @@ class Ui_MainWindow(object):
         self.frameIndexSlider.setOrientation(QtCore.Qt.Horizontal)
         self.frameIndexSlider.setObjectName("frameIndexSlider")
         self.verticalLayout_5.addWidget(self.frameIndexSlider)
-        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_5.addItem(spacerItem6)
+        spacerItem12 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_5.addItem(spacerItem12)
         self.gridLayout.addWidget(self.sagittal, 0, 1, 1, 1)
         self.frame_7 = QtWidgets.QFrame(self.rhreeView)
         self.frame_7.setAutoFillBackground(False)
@@ -330,19 +374,36 @@ class Ui_MainWindow(object):
         self.coronal.setObjectName("coronal")
         self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.coronal)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
-        self.label_24 = QtWidgets.QLabel(self.coronal)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.widget_6 = QtWidgets.QWidget(self.coronal)
+        self.widget_6.setObjectName("widget_6")
+        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.widget_6)
+        self.horizontalLayout_9.setContentsMargins(-1, 0, -1, 11)
+        self.horizontalLayout_9.setSpacing(0)
+        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.label_24 = QtWidgets.QLabel(self.widget_6)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_24.sizePolicy().hasHeightForWidth())
         self.label_24.setSizePolicy(sizePolicy)
         self.label_24.setStyleSheet("color:rgb(255, 255, 255);font-weight: bold; font-size: 15;")
         self.label_24.setObjectName("label_24")
-        self.verticalLayout_7.addWidget(self.label_24)
+        self.horizontalLayout_9.addWidget(self.label_24)
+        self.viewCoro = QtWidgets.QPushButton(self.widget_6)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.viewCoro.sizePolicy().hasHeightForWidth())
+        self.viewCoro.setSizePolicy(sizePolicy)
+        self.viewCoro.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.viewCoro.setStyleSheet("color: rgb(255, 255, 255);font-weight: bold; font-size: 15;")
+        self.viewCoro.setObjectName("viewCoro")
+        self.horizontalLayout_9.addWidget(self.viewCoro)
+        self.verticalLayout_7.addWidget(self.widget_6)
         spacerItem9 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_7.addItem(spacerItem9)
-        self.cImage = QtWidgets.QLabel(self.coronal)
-        self.cImage.setMaximumSize(QtCore.QSize(615, 200))
+        self.cImage = SCImageLabel(self.coronal)
+        # self.cImage.setMaximumSize(QtCore.QSize(615, 200))
         self.cImage.setText("")
         self.cImage.setObjectName("cImage")
         self.verticalLayout_7.addWidget(self.cImage)
@@ -350,6 +411,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_7.addItem(spacerItem10)
         self.gridLayout.addWidget(self.coronal, 1, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
+        self.tImage.setSCLabel(self.sImage, self.cImage)
+
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1835, 26))
         self.menubar.setObjectName("menubar")
@@ -368,15 +431,23 @@ class Ui_MainWindow(object):
         self.uploadFile = QtWidgets.QAction(MainWindow)
         self.uploadFile.setObjectName("uploadFile")
         self.uploadFile.triggered.connect(self.uploadFileAction)
+        self.searchFile = QtWidgets.QAction(MainWindow)
+        self.searchFile.setObjectName("searchFile")
+        self.searchFile.triggered.connect(self.searchFileAction)
         self.menu.addAction(self.importFile)
         self.menu.addAction(self.exportFile)
         self.menu.addAction(self.uploadFile)
+        self.menu.addAction(self.searchFile)
         self.menubar.addAction(self.menu.menuAction())
 
         self.retranslateUi(MainWindow)
         self.colorPickerTrigger.clicked.connect(self.clickColorPickerTrigger)  # 颜色选择器
         self.pushButton.clicked.connect(self.toFrame)
         self.callModelButton.clicked.connect(self.callModel)
+
+        self.viewSagi.clicked.connect(self.sagittalView)
+        self.viewCoro.clicked.connect(self.coronalView)
+        self.viewTrans.clicked.connect(self.transverseView)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def clickColorPickerTrigger(self):
@@ -384,6 +455,7 @@ class Ui_MainWindow(object):
         if color.isValid():
             # 在 Label 上显示选择的颜色
             self.colorLabel.setStyleSheet(f'background-color: {color.name()}')
+
 
     def importFileAction(self):
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "选择文件", "", "All Files (*)")
@@ -397,6 +469,9 @@ class Ui_MainWindow(object):
     def exportFileAction(self):
         pass
 
+    def searchFileAction(self):
+        pass
+
     def uploadFileAction(self):
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "选择文件", "", "All Files (*)")
         if file_path:
@@ -405,29 +480,45 @@ class Ui_MainWindow(object):
             upload_dialog.start_upload(file_path=file_path, url='http://127.0.0.1:8000/api/storeDicom')
             upload_dialog.exec_()
 
-
     def showImage(self, dicomFile):
-        self.tImage.scale = IMAGE_WIDTH /dicomFile.rows
-
+        scale = IMAGE_WIDTH / dicomFile.columns  # 宽度
+        print("scale:", scale)
+        self.tImage.setScale(scale)
+        self.sImage.setScale(scale)
+        self.cImage.setScale(scale)
+        self.tImage.setFixedSize(IMAGE_WIDTH, dicomFile.transverseHeight * scale)
+        self.sImage.setFixedSize(IMAGE_WIDTH, dicomFile.longitudinalHeight * scale)
+        self.cImage.setFixedSize(IMAGE_WIDTH, dicomFile.longitudinalHeight * scale)
         self.frameIndexSpinBox.setRange(1, dicomFile.frame_count)
-        self.tImage.frames = dicomFile.pixelAllTransverse()
+        self.tImage.setFrames(dicomFile.pixelAllTransverse())
         self.tImage.setSlider(self.frameIndexSlider, dicomFile.frame_count)
-        self.tImage.showCurrentImage()
         self.tImage.setLabel(self.frameIndexLable)
+        self.tImage.setStart(dicomFile.transverseMinX, dicomFile.transverseMinY)
         showCertainImage(self.sImage, dicomFile.pixelSagittal())
         showCertainImage(self.cImage, dicomFile.pixelCoronal())
 
     def toFrame(self):
         if self.dicomFile:
-            self.tImage.setFrameIndex(self.frameIndexSpinBox.value())
+            self.tImage.setFrameIndex(self.frameIndexSpinBox.value() - 1)
+
+    def transverseView(self):
+        imageView(self.tImage.getPixmapPainted())
+
+    def sagittalView(self):
+        imageView(self.sImage)
+
+    def coronalView(self):
+        imageView(self.cImage)
 
     def callModel(self):
         if self.dicomFile is None:
             return
         if self.checkModel.isChecked():
             frame_index = self.tImage.frame_index
-            predictions = getCheckPrediction(frame_index, self.dicomFile)
-            self.tImage.setPredictions(predictions)
+            checkDialog = CheckDialog()
+            checkDialog.start_check(self.dicomFile, frame_index)
+            checkDialog.exec_()
+            self.tImage.setPredictions(checkDialog.getPredictions())
 
         elif self.segmentationModel.isChecked():
             pass
@@ -475,9 +566,12 @@ class Ui_MainWindow(object):
         self.time.setText(_translate("MainWindow", "检查时间"))
         self.modality.setText(_translate("MainWindow", "类型"))
         self.frameNum.setText(_translate("MainWindow", "帧数"))
-        self.label_18.setText(_translate("MainWindow", "轴位面 Transverse View"))
         self.label_24.setText(_translate("MainWindow", "冠状面 Coronal View"))
+        self.viewCoro.setText(_translate("MainWindow", "点击查看"))
         self.label_20.setText(_translate("MainWindow", "矢状面 Sagittal View"))
+        self.viewSagi.setText(_translate("MainWindow", "点击查看"))
+        self.label_18.setText(_translate("MainWindow", "轴位面 Transverse View"))
+        self.viewTrans.setText(_translate("MainWindow", "点击查看"))
         self.menu.setTitle(_translate("MainWindow", "文件"))
         self.importFile.setText(_translate("MainWindow", "导入"))
         self.exportFile.setText(_translate("MainWindow", "导出"))
