@@ -1,69 +1,43 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QTransform, QPixmap
-from PyQt5.QtWidgets import QApplication, QLabel, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QApplication, QLabel
+from PyQt5.QtGui import QPainter, QPixmap, QFont, QColor
 
 
-class ZoomableLabel(QLabel):
-    def __init__(self):
-        super().__init__()
-        # 设置初始的缩放级别
-        self.scale_factor = 1.0
+class CustomLabel(QLabel):
+    def __init__(self, parent=None):
+        super().__init__(parent)
 
-    def wheelEvent(self, event):
-        # 获取鼠标滚轮的滚动方向
-        delta = event.angleDelta().y()
+        # 创建一个空的 pixmap
+        self.pixmap = QPixmap(300, 200)
+        self.pixmap.fill(Qt.white)
 
-        # 根据滚动方向进行缩放
-        if delta > 0:
-            self.zoom(1.1)
-        else:
-            self.zoom(0.9)
+    def paintEvent(self, event):
+        painter = QPainter(self.pixmap)
 
-    def zoom(self, scale_factor):
-        # 限制缩放级别的上下限
-        min_scale = 0.1
-        max_scale = 10.0
-        new_scale_factor = self.scale_factor * scale_factor
-        new_scale_factor = max(min(new_scale_factor, max_scale), min_scale)
+        # 清除 pixmap 内容
+        self.pixmap.fill(Qt.white)
 
-        # 更新缩放级别
-        self.scale_factor = new_scale_factor
+        # 设置字体
+        font = QFont()
+        font.setPointSize(14)
+        painter.setFont(font)
 
-        # 获取当前的 pixmap
-        current_pixmap = self.pixmap()
+        # 绘制矩形
+        rectangle = self.rect()
+        painter.drawRect(rectangle)
 
-        if current_pixmap is not None:
-            # 进行缩放
-            scaled_pixmap = current_pixmap.transformed(QTransform().scale(new_scale_factor, new_scale_factor),
-                                                       Qt.SmoothTransformation)
+        # 在矩形的左上角显示文字
+        textRectangle = rectangle.adjusted(10, 10, -10, -10)
+        painter.drawText(textRectangle, Qt.AlignTop | Qt.AlignLeft, "Hello, World!")
 
-            # 设置缩放后的 pixmap
-            self.setPixmap(scaled_pixmap)
+        # 在标签上显示 pixmap
+        self.setPixmap(self.pixmap)
+
+        super().paintEvent(event)
 
 
-if __name__ == '__main__':
-    app = QApplication([])
-
-    # 创建一个QWidget作为主窗口
-    window = QWidget()
-
-    # 创建一个ZoomableLabel用于显示图片并响应滚轮事件
-    label = ZoomableLabel()
-
-    # 加载原始图片
-    pixmap = QPixmap('../temp/data.png')
-
-    # 设置初始的pixmap
-    label.setPixmap(pixmap)
-
-    # 创建一个垂直布局，并将 ZoomableLabel 添加到其中
-    layout = QVBoxLayout()
-    layout.addWidget(label)
-
-    # 设置主窗口的布局
-    window.setLayout(layout)
-
-    # 显示主窗口
-    window.show()
-
-    app.exec_()
+# 测试
+app = QApplication([])
+label = CustomLabel()
+label.show()
+app.exec_()

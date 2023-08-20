@@ -3,11 +3,12 @@ import sys
 
 import requests
 
+from searchDialog import SearchDialog, getAllDicom
 from UI.checkColorWidget import CheckColorWidget
 from UI.imageViewer import ImageViewDialog
 from UI.upload import UploadDialog
 from checkDialog import CheckDialog
-from config import IMAGE_WIDTH
+import config
 from imageLabel import ImageLabel
 # Form implementation generated from reading ui file 'viewer.ui'
 #
@@ -74,6 +75,7 @@ class Ui_MainWindow(object):
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
         self.label_7 = QtWidgets.QLabel(self.showControl)
+        self.label_7.setStyleSheet("font-weight: bold; color:rgb(0, 0, 127);margin-top:5px")
         self.label_7.setObjectName("label_7")
         self.verticalLayout.addWidget(self.label_7)
 
@@ -85,9 +87,35 @@ class Ui_MainWindow(object):
         self.thirdControl = CheckColorWidget(self.showControl, '第三类病灶xs', index=2)
         self.verticalLayout.addWidget(self.thirdControl)
 
-        self.checkBox_2 = QtWidgets.QCheckBox(self.showControl)
-        self.checkBox_2.setObjectName("checkBox_2")
-        self.verticalLayout.addWidget(self.checkBox_2)
+        self.show_nidus_name = QtWidgets.QCheckBox(self.showControl)
+        self.show_nidus_name.setStyleSheet("margin-left: 15px; margin-top: 2px")
+        self.show_nidus_name.setObjectName("show_nidus_name")
+        self.verticalLayout.addWidget(self.show_nidus_name)
+        self.widget_8 = QtWidgets.QWidget(self.showControl)
+        self.widget_8.setObjectName("widget_8")
+        self.horizontalLayout_11 = QtWidgets.QHBoxLayout(self.widget_8)
+        self.horizontalLayout_11.setContentsMargins(-1, 5, -1, 5)
+        self.horizontalLayout_11.setObjectName("horizontalLayout_11")
+        self.label_9 = QtWidgets.QLabel(self.widget_8)
+        self.label_9.setObjectName("label_9")
+        self.horizontalLayout_11.addWidget(self.label_9)
+        self.ratio = QtWidgets.QLabel(self.widget_8)
+        self.ratio.setText(str(config.MIN_CHECK_SHOW_RATIO))
+        self.ratio.setObjectName("ratio")
+        self.horizontalLayout_11.addWidget(self.ratio)
+        self.verticalLayout.addWidget(self.widget_8)
+        self.widget_7 = QtWidgets.QWidget(self.showControl)
+        self.widget_7.setObjectName("widget_7")
+        self.horizontalLayout_10 = QtWidgets.QHBoxLayout(self.widget_7)
+        self.horizontalLayout_10.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalLayout_10.setObjectName("horizontalLayout_10")
+        self.doubleSpinBox = QtWidgets.QDoubleSpinBox(self.widget_7)
+        self.doubleSpinBox.setObjectName("doubleSpinBox")
+        self.horizontalLayout_10.addWidget(self.doubleSpinBox)
+        self.setRatioButton = QtWidgets.QPushButton(self.widget_7)
+        self.setRatioButton.setObjectName("setRatioButton")
+        self.horizontalLayout_10.addWidget(self.setRatioButton)
+        self.verticalLayout.addWidget(self.widget_7)
         self.label_2 = QtWidgets.QLabel(self.showControl)
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
@@ -444,6 +472,7 @@ class Ui_MainWindow(object):
         self.colorPickerTrigger.clicked.connect(self.clickColorPickerTrigger)  # 颜色选择器
         self.pushButton.clicked.connect(self.toFrame)
         self.callModelButton.clicked.connect(self.callModel)
+        self.setRatioButton.clicked.connect(self.setRatio)
 
         self.viewSagi.clicked.connect(self.sagittalView)
         self.viewCoro.clicked.connect(self.coronalView)
@@ -455,7 +484,6 @@ class Ui_MainWindow(object):
         if color.isValid():
             # 在 Label 上显示选择的颜色
             self.colorLabel.setStyleSheet(f'background-color: {color.name()}')
-
 
     def importFileAction(self):
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "选择文件", "", "All Files (*)")
@@ -470,7 +498,14 @@ class Ui_MainWindow(object):
         pass
 
     def searchFileAction(self):
-        pass
+        table_data = getAllDicom()
+        dialog = SearchDialog(table_data)
+        dialog.exec_()
+
+    def setRatio(self):
+        config.MIN_CHECK_SHOW_RATIO = self.doubleSpinBox.value()
+        self.ratio.setText(str(config.MIN_CHECK_SHOW_RATIO))
+        self.tImage.update()
 
     def uploadFileAction(self):
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "选择文件", "", "All Files (*)")
@@ -481,14 +516,14 @@ class Ui_MainWindow(object):
             upload_dialog.exec_()
 
     def showImage(self, dicomFile):
-        scale = IMAGE_WIDTH / dicomFile.columns  # 宽度
+        scale = config.IMAGE_WIDTH / dicomFile.columns  # 宽度
         print("scale:", scale)
         self.tImage.setScale(scale)
         self.sImage.setScale(scale)
         self.cImage.setScale(scale)
-        self.tImage.setFixedSize(IMAGE_WIDTH, dicomFile.transverseHeight * scale)
-        self.sImage.setFixedSize(IMAGE_WIDTH, dicomFile.longitudinalHeight * scale)
-        self.cImage.setFixedSize(IMAGE_WIDTH, dicomFile.longitudinalHeight * scale)
+        self.tImage.setFixedSize(config.IMAGE_WIDTH, dicomFile.transverseHeight * scale)
+        self.sImage.setFixedSize(config.IMAGE_WIDTH, dicomFile.longitudinalHeight * scale)
+        self.cImage.setFixedSize(config.IMAGE_WIDTH, dicomFile.longitudinalHeight * scale)
         self.frameIndexSpinBox.setRange(1, dicomFile.frame_count)
         self.tImage.setFrames(dicomFile.pixelAllTransverse())
         self.tImage.setSlider(self.frameIndexSlider, dicomFile.frame_count)
@@ -496,6 +531,7 @@ class Ui_MainWindow(object):
         self.tImage.setStart(dicomFile.transverseMinX, dicomFile.transverseMinY)
         showCertainImage(self.sImage, dicomFile.pixelSagittal())
         showCertainImage(self.cImage, dicomFile.pixelCoronal())
+        self.tImage.setShowNameCheckbox(self.show_nidus_name)
 
     def toFrame(self):
         if self.dicomFile:
@@ -505,10 +541,10 @@ class Ui_MainWindow(object):
         imageView(self.tImage.getPixmapPainted())
 
     def sagittalView(self):
-        imageView(self.sImage)
+        imageView(self.sImage.getPixmapPainted())
 
     def coronalView(self):
-        imageView(self.cImage)
+        imageView(self.cImage.getPixmapPainted())
 
     def callModel(self):
         if self.dicomFile is None:
@@ -516,7 +552,7 @@ class Ui_MainWindow(object):
         if self.checkModel.isChecked():
             frame_index = self.tImage.frame_index
             checkDialog = CheckDialog()
-            checkDialog.start_check(self.dicomFile, frame_index)
+            checkDialog.start_check(self.dicomFile)
             checkDialog.exec_()
             self.tImage.setPredictions(checkDialog.getPredictions())
 
@@ -544,7 +580,9 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "显示控制区"))
         self.label_7.setText(_translate("MainWindow", "检测结果病灶显示："))
-        self.checkBox_2.setText(_translate("MainWindow", "显示病灶名称"))
+        self.show_nidus_name.setText(_translate("MainWindow", "显示病灶名称"))
+        self.label_9.setText(_translate("MainWindow", "置信度"))
+        self.setRatioButton.setText(_translate("MainWindow", "设置置信度"))
         self.label_2.setText(_translate("MainWindow", "病灶透明度"))
         self.label_3.setText(_translate("MainWindow", "病灶颜色"))
         self.colorPickerTrigger.setText(_translate("MainWindow", "选择颜色"))
@@ -576,3 +614,4 @@ class Ui_MainWindow(object):
         self.importFile.setText(_translate("MainWindow", "导入"))
         self.exportFile.setText(_translate("MainWindow", "导出"))
         self.uploadFile.setText(_translate("MainWindow", "上传"))
+        self.searchFile.setText(_translate("MainWindow", "查询"))

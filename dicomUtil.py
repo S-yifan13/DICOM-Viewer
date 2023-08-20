@@ -101,6 +101,10 @@ class Dicom:
         cv2.imwrite(target_path, transverse_view)
         print('save_to_png: ' + target_path)
 
+    def frame2PngAll(self, target_path):
+        for i in range(self.pixel_array.shape[0]):
+            self.frame2Png(i, target_path + str(i) + '.png')
+
     def pixelTransverse(self, frame_index):
         if frame_index < 0 or frame_index >= self.pixel_array.shape[0]:
             raise ValueError('frame_index out of range.')

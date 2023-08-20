@@ -19,13 +19,16 @@ class SCImageLabel(QLabel):
             return (self.frame_index + 1) / self.total_frame * self.width()
         return 0
 
-    def paintEvent(self, event):
-        super().paintEvent(event)
+    def drawOneLine(self, painter):
         if self.frame_index >= 0 and self.total_frame > 0:
-            painter = QPainter(self)
             painter.setPen(QPen(Qt.white, 1))
             x = self.getX()
             painter.drawLine(x, 0, x, self.height())
+
+    def paintEvent(self, event):
+        super().paintEvent(event)
+        painter = QPainter(self)
+        self.drawOneLine(painter)
 
     def setFrameIndex(self, frame_index):
         self.frame_index = frame_index
@@ -37,3 +40,10 @@ class SCImageLabel(QLabel):
 
     def setScale(self, scale):
         self.scale_factor = scale
+
+    def getPixmapPainted(self):
+        pixmap = self.pixmap()
+        painter = QPainter(pixmap)
+        self.drawOneLine(painter)
+        return pixmap
+

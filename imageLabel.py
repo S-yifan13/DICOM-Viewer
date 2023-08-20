@@ -2,21 +2,20 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QLabel, QApplication
 from PyQt5.QtGui import QImage, QPixmap, QPen, QPainter
 import numpy as np
+import config
 
-from config import MIN_CHECK_SHOW_RATIO
-
-nidus_type = ['js', 'kq', 'xs']
+nidus_type = config.NIDUS_TYPE
 
 
-def drawOneRect(painter, prediction, color, scale=1, left_start=0, top_start=0):
+def drawOneRect(painter, prediction, color, scale=1, left_start=0, top_start=0, text=None):
     pen = QPen(color)
     painter.setPen(pen)
     i = 0
     for rect in prediction:
         if i >= 5:
             break
-        # if rect[4] < MIN_CHECK_SHOW_RATIO:
-        #     continue
+        if rect[4] < config.MIN_CHECK_SHOW_RATIO:
+            continue
         i += 1
         left_top_x = (rect[0] + left_start) * scale
         left_top_y = (rect[1] + top_start) * scale
@@ -24,6 +23,12 @@ def drawOneRect(painter, prediction, color, scale=1, left_start=0, top_start=0):
         height = (rect[3] - rect[1]) * scale
         painter.drawRect(int(left_top_x), int(left_top_y), int(width), int(height))
         # print('left_top_x: {}, left_top_y: {}, width: {}, height: {}'.format(left_top_x, left_top_y, width, height))
+
+        if text is not None and len(text) > 0:
+            font = painter.font()
+            font.setPointSize(10)
+            painter.setFont(font)
+            painter.drawText(int(left_top_x), int(left_top_y) - 3, text)
 
 
 class ImageLabel(QLabel):
@@ -42,6 +47,16 @@ class ImageLabel(QLabel):
         self.top_start = 0
         self.s_label = None
         self.c_label = None
+        self.show_name = False
+        self.show_name_checkbox = None
+
+    def setShowName(self, show_name):
+        self.show_name = show_name
+        self.update()
+
+    def setShowNameCheckbox(self, show_name_checkbox):
+        self.show_name_checkbox = show_name_checkbox
+        show_name_checkbox.stateChanged.connect(self.setShowName)
 
     def setSCLabel(self, s_label, c_label):
         self.s_label = s_label
@@ -122,16 +137,15 @@ class ImageLabel(QLabel):
 
     def paintEvent(self, event):
         super().paintEvent(event)
-        try:
-            if self.predictions is not None:
-                painter = QPainter(self)
-                for i in range(3):
-                    if self.draw_check[i]:
-                        prediction = self.predictions[nidus_type[i]]
-                        drawOneRect(painter, prediction, self.check_color[i], self.scale,
-                                    left_start=self.left_start, top_start=self.top_start)
-        except Exception as e:
-            print(e)
+        if self.predictions is not None:
+            painter = QPainter(self)
+            for i in range(3):
+                text = nidus_type[i] if self.show_name else None
+                if self.draw_check[i]:
+                    prediction = self.predictions[self.frame_index][nidus_type[i]]
+                    drawOneRect(painter, prediction, self.check_color[i], self.scale,
+                                left_start=self.left_start, top_start=self.top_start,
+                                text=text)
 
     def setPredictions(self, predictions):
         self.predictions = predictions
@@ -144,14 +158,14 @@ class ImageLabel(QLabel):
         painter = QPainter(pixmap)
         if self.predictions is not None:
             for i in range(3):
+                text = nidus_type[i] if self.show_name else None
                 if self.draw_check[i]:
-                    prediction = self.predictions[nidus_type[i]]
+                    prediction = self.predictions[self.frame_index][self.frame_index][nidus_type[i]]
                     drawOneRect(painter, prediction, self.check_color[i], self.scale,
-                                left_start=self.left_start, top_start=self.top_start)
+                                left_start=self.left_start, top_start=self.top_start,
+                                text=text)
         return pixmap
 
     def setStart(self, left_start, top_start):
         self.left_start = left_start
         self.top_start = top_start
-
-
