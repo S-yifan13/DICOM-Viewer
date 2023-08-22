@@ -30,6 +30,14 @@ def drawOneRect(painter, prediction, color, scale=1, left_start=0, top_start=0, 
             painter.setFont(font)
             painter.drawText(int(left_top_x), int(left_top_y) - 3, text)
 
+def draw_seg(array, painter, color, scale=1, left_start=0, top_start=0):
+    pen = QPen(color)
+    painter.setPen(pen)
+    for point in array:
+        x, y = point
+        x = (x + left_start) * scale
+        y = (y + top_start) * scale
+        painter.drawPoint(int(x), int(y))
 
 class ImageLabel(QLabel):
     def __init__(self, parent=None):
@@ -49,7 +57,13 @@ class ImageLabel(QLabel):
         self.c_label = None
         self.show_name = False
         self.show_name_checkbox = None
+        self.seg_prediction = None
+        self.draw_seg = True
 
+    def setSegPrediction(self, seg_prediction):
+        self.seg_prediction = seg_prediction
+        self.update()
+    
     def setShowName(self, show_name):
         self.show_name = show_name
         self.update()
@@ -137,8 +151,8 @@ class ImageLabel(QLabel):
 
     def paintEvent(self, event):
         super().paintEvent(event)
+        painter = QPainter(self)
         if self.predictions is not None:
-            painter = QPainter(self)
             for i in range(3):
                 text = nidus_type[i] if self.show_name else None
                 if self.draw_check[i]:
@@ -146,6 +160,9 @@ class ImageLabel(QLabel):
                     drawOneRect(painter, prediction, self.check_color[i], self.scale,
                                 left_start=self.left_start, top_start=self.top_start,
                                 text=text)
+
+        if self.draw_seg and self.seg_prediction is not None:
+            draw_seg(self.seg_prediction, painter, Qt.red, self.scale, self.left_start, self.top_start)
 
     def setPredictions(self, predictions):
         self.predictions = predictions

@@ -9,10 +9,10 @@ import config
 from UI.progressDialog import Ui_progressDialog
 from dicomUtil import Dicom
 
-
-class CheckThread(QThread):
+class CheckThreadAll(QThread):
     progress_update = pyqtSignal(float)
     progress_name = pyqtSignal(str)
+    check_finished = pyqtSignal()
 
     def __init__(self, dicom=None):
         super().__init__()
@@ -92,6 +92,7 @@ class CheckThread(QThread):
             self.progress_name.emit('未导入dicom文件')
         else:
             self.predictions = self.getAllCheckResult(self.dicom)
+            self.check_finished.emit()
 
 class CheckDialog(QtWidgets.QDialog):
     def __init__(self, parent=None):
@@ -101,20 +102,18 @@ class CheckDialog(QtWidgets.QDialog):
         self.ui.setupUi(self)
 
     def update_progress(self, value):
-        self.ui.setProgressBar(value)
+        if value > 0:
+            self.ui.setProgressBar(value)
 
     def update_label(self, value):
         self.ui.setLabel(value)
 
     def start_check(self, dicom):
-        self.thread = CheckThread(dicom)
+        self.thread = CheckThreadAll(dicom)
         self.thread.progress_update.connect(self.update_progress)
         self.thread.progress_name.connect(self.update_label)
-        self.thread.finished.connect(self.check_finished)
+        self.thread.check_finished.connect(self.close)
         self.thread.start()
-
-    def check_finished(self):
-        print("check finished")
 
     def getPredictions(self):
         return self.thread.predictions

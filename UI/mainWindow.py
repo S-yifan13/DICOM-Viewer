@@ -24,6 +24,7 @@ from PyQt5.QtWidgets import QColorDialog, QLabel
 
 from dicomUtil import Dicom
 from scImageLabel import SCImageLabel
+from segDialog import SegDialog
 
 
 def showCertainImage(label, pixel_array):
@@ -119,6 +120,12 @@ class Ui_MainWindow(object):
         self.label_2 = QtWidgets.QLabel(self.showControl)
         self.label_2.setObjectName("label_2")
         self.verticalLayout.addWidget(self.label_2)
+
+        self.label_10 = QtWidgets.QLabel(self.showControl)
+        self.label_10.setStyleSheet("font-weight: bold; color:rgb(0, 0, 127);margin-top:5px")
+        self.label_10.setObjectName("label_10")
+        self.verticalLayout.addWidget(self.label_10)
+
         self.horizontalSlider = QtWidgets.QSlider(self.showControl)
         self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider.setObjectName("horizontalSlider")
@@ -546,20 +553,30 @@ class Ui_MainWindow(object):
     def coronalView(self):
         imageView(self.cImage.getPixmapPainted())
 
+    def callCheckModel(self):
+        if self.dicomFile is None:
+            return
+        checkDialog = CheckDialog()
+        checkDialog.start_check(self.dicomFile)
+        checkDialog.exec_()
+        self.tImage.setPredictions(checkDialog.getPredictions())
+
+    def callSegModel(self):
+        if self.dicomFile is None:
+            return
+        segDialog = SegDialog()
+        segDialog.start_seg(self.dicomFile)
+        segDialog.exec_()
+        self.tImage.setSegPrediction(segDialog.getPredictions())
+
     def callModel(self):
         if self.dicomFile is None:
             return
         if self.checkModel.isChecked():
-            frame_index = self.tImage.frame_index
-            checkDialog = CheckDialog()
-            checkDialog.start_check(self.dicomFile)
-            checkDialog.exec_()
-            self.tImage.setPredictions(checkDialog.getPredictions())
+            self.callCheckModel()
 
         elif self.segmentationModel.isChecked():
-            pass
-        else:
-            pass
+            self.callSegModel()
 
     def showInfo(self, dicomFile):
         patient = dicomFile.patient
@@ -580,6 +597,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "显示控制区"))
         self.label_7.setText(_translate("MainWindow", "检测结果病灶显示："))
+        self.label_10.setText(_translate("MainWindow", "分割结果病灶显示："))
         self.show_nidus_name.setText(_translate("MainWindow", "显示病灶名称"))
         self.label_9.setText(_translate("MainWindow", "置信度"))
         self.setRatioButton.setText(_translate("MainWindow", "设置置信度"))
