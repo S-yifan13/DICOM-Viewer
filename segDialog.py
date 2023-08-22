@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import requests
 from PyQt5 import QtWidgets
@@ -10,13 +11,59 @@ from UI.progressDialog import Ui_progressDialog
 from dicomUtil import Dicom
 
 
-class SegThread(QThread):
+class SegThreadAll(QThread):
     progress_update = pyqtSignal(float)
+    progress_name = pyqtSignal(str)
+    seg_finished = pyqtSignal()
 
-    def __init__(self, parent=None, dicom=None):
+    def __init__(self, parent=None, dicom=None, generate=False):
         super().__init__(parent)
         self.dicom = dicom
         self.predictions = None
+        self.generate = generate
+
+    def frame2PngAll(self, target_path, progress_num=50):
+        if self.dicom is not None:
+            for i in range(self.dicom.pixel_array.shape[0]):
+                self.dicom.frame2Png(i, target_path + str(i) + '.png')
+                self.progress_update.emit(i / self.dicom.pixel_array.shape[0] * progress_num)
+
+    def getSegResultAll(self, dicom):
+        if not self.generate:
+            self.progress_name.emit('正在处理帧图像...')
+            self.progress_update.emit(0)
+            if os.path.exists(config.TEMP_CHECK_DIR):
+                shutil.rmtree(config.TEMP_CHECK_DIR)
+            os.mkdir(config.TEMP_CHECK_DIR)
+            self.frame2PngAll(config.TEMP_SEG_DIR)
+            print('store temp seg image success')
+            self.generate = True
+        self.progress_update.emit(50)
+        self.progress_name.emit('正在检测...')
+        batch_size = config.SEG_BATCH_SIZE
+        batch = dicom.frame_count // batch_size + 1
+        predictions = []
+        try:
+            for i in range(batch):
+                size = batch_size
+                if i == batch - 1:
+                    size = dicom.frame_count - i * batch_size
+                files = []
+                for j in range(batch_size * i, batch_size * i + size):
+                    temp_path = config.TEMP_CHECK_DIR + "{}.png".format(i)
+                    files.append(('image', open(temp_path, 'rb')))
+                response = requests.post(config.SEGMENTATION_MODEL_URL, files=files)
+                predictions += response.json()['predictions']
+                print('get check prediction success' + str(i))
+                self.progress_update.emit(50 + 50 * i / batch)
+            self.progress_update.emit(100)
+            self.progress_name.emit('检测完成!')
+            return predictions
+        except requests.exceptions.RequestException as e:
+            self.progress_update.emit(-1)
+            self.progress_name.emit('请求错误')
+            print(e)
+            return False
 
     def getSegResult(self, dicom, frame_index):
         if dicom is None or frame_index < 0 or frame_index >= dicom.pixel_array.shape[0]:
@@ -46,7 +93,12 @@ class SegThread(QThread):
             return False
 
     def run(self):
-        self.getSegResult(self.dicom, 0)
+        if self.dicom is None:
+            self.progress_update.emit(-2)
+            self.progress_name.emit('未导入dicom文件')
+        else:
+            self.predictions = self.getSegResultAll(self.dicom)
+            self.seg_finished.emit()
 
 
 class SegDialog(QDialog):
@@ -66,11 +118,11 @@ class SegDialog(QDialog):
     def update_label(self, value):
         self.ui.setLabel(value)
 
-    def start_seg(self, dicom):
-        self.thread = SegThread(self, dicom)
+    def start_seg(self, dicom, generate=False):
+        self.thread = SegThreadAll(self, dicom, generate)
         self.thread.progress_update.connect(self.update_progress)
-        # self.thread.progress_name.connect(self.update_label)
-        # self.thread.check_finished.connect(self.close)
+        self.thread.progress_name.connect(self.update_label)
+        self.thread.seg_finished.connect(self.close)
         self.thread.start()
 
 if __name__ == '__main__':

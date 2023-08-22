@@ -47,6 +47,7 @@ def imageView(image_label):
 class Ui_MainWindow(object):
     def __init__(self):
         self.dicomFile = None
+        self.imageGenerate = True
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -75,6 +76,35 @@ class Ui_MainWindow(object):
         self.label.setStyleSheet("fontsize: 15px; font-weight: bold")
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
+        self.label_14 = QtWidgets.QLabel(self.showControl)
+        self.label_14.setStyleSheet("font-weight: bold; color:rgb(0, 0, 127);margin-top:5px")
+        self.label_14.setObjectName("label_14")
+        self.verticalLayout.addWidget(self.label_14)
+        self.widget_3 = QtWidgets.QWidget(self.showControl)
+        self.widget_3.setObjectName("widget_3")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.widget_3)
+        self.horizontalLayout_3.setContentsMargins(-1, 5, -1, 5)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.label_4 = QtWidgets.QLabel(self.widget_3)
+        self.label_4.setObjectName("label_4")
+        self.horizontalLayout_3.addWidget(self.label_4)
+        self.frameIndexLable = QtWidgets.QLabel(self.widget_3)
+        self.frameIndexLable.setText("")
+        self.frameIndexLable.setObjectName("frameIndexLable")
+        self.horizontalLayout_3.addWidget(self.frameIndexLable)
+        self.verticalLayout.addWidget(self.widget_3)
+        self.widget_2 = QtWidgets.QWidget(self.showControl)
+        self.widget_2.setObjectName("widget_2")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget_2)
+        self.horizontalLayout_2.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.frameIndexSpinBox = QtWidgets.QSpinBox(self.widget_2)
+        self.frameIndexSpinBox.setObjectName("frameIndexSpinBox")
+        self.horizontalLayout_2.addWidget(self.frameIndexSpinBox)
+        self.pushButton = QtWidgets.QPushButton(self.widget_2)
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout_2.addWidget(self.pushButton)
+        self.verticalLayout.addWidget(self.widget_2)
         self.label_7 = QtWidgets.QLabel(self.showControl)
         self.label_7.setStyleSheet("font-weight: bold; color:rgb(0, 0, 127);margin-top:5px")
         self.label_7.setObjectName("label_7")
@@ -117,71 +147,26 @@ class Ui_MainWindow(object):
         self.setRatioButton.setObjectName("setRatioButton")
         self.horizontalLayout_10.addWidget(self.setRatioButton)
         self.verticalLayout.addWidget(self.widget_7)
-        self.label_2 = QtWidgets.QLabel(self.showControl)
-        self.label_2.setObjectName("label_2")
-        self.verticalLayout.addWidget(self.label_2)
-
         self.label_10 = QtWidgets.QLabel(self.showControl)
         self.label_10.setStyleSheet("font-weight: bold; color:rgb(0, 0, 127);margin-top:5px")
         self.label_10.setObjectName("label_10")
         self.verticalLayout.addWidget(self.label_10)
 
-        self.horizontalSlider = QtWidgets.QSlider(self.showControl)
-        self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
-        self.horizontalSlider.setObjectName("horizontalSlider")
-        self.verticalLayout.addWidget(self.horizontalSlider)
-        self.label_3 = QtWidgets.QLabel(self.showControl)
-        self.label_3.setObjectName("label_3")
-        self.verticalLayout.addWidget(self.label_3)
-        self.widget = QtWidgets.QWidget(self.showControl)
-        self.widget.setObjectName("widget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.colorPickerTrigger = QtWidgets.QPushButton(self.widget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.colorPickerTrigger.sizePolicy().hasHeightForWidth())
-        self.colorPickerTrigger.setSizePolicy(sizePolicy)
-        self.colorPickerTrigger.setObjectName("colorPickerTrigger")
-        self.horizontalLayout.addWidget(self.colorPickerTrigger)
-        self.colorLabel = QtWidgets.QLabel(self.widget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.colorLabel.sizePolicy().hasHeightForWidth())
-        self.colorLabel.setSizePolicy(sizePolicy)
-        self.colorLabel.setMinimumSize(QtCore.QSize(25, 25))
-        self.colorLabel.setMaximumSize(QtCore.QSize(25, 25))
-        self.colorLabel.setText("")
-        self.colorLabel.setObjectName("colorLabel")
-        self.horizontalLayout.addWidget(self.colorLabel)
-        self.verticalLayout.addWidget(self.widget)
-        self.widget_3 = QtWidgets.QWidget(self.showControl)
-        self.widget_3.setObjectName("widget_3")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.widget_3)
-        self.horizontalLayout_3.setContentsMargins(-1, 5, -1, 5)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.label_4 = QtWidgets.QLabel(self.widget_3)
-        self.label_4.setObjectName("label_4")
-        self.horizontalLayout_3.addWidget(self.label_4)
-        self.frameIndexLable = QtWidgets.QLabel(self.widget_3)
-        self.frameIndexLable.setText("")
-        self.frameIndexLable.setObjectName("frameIndexLable")
-        self.horizontalLayout_3.addWidget(self.frameIndexLable)
-        self.verticalLayout.addWidget(self.widget_3)
-        self.widget_2 = QtWidgets.QWidget(self.showControl)
-        self.widget_2.setObjectName("widget_2")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget_2)
-        self.horizontalLayout_2.setContentsMargins(-1, 0, -1, -1)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.frameIndexSpinBox = QtWidgets.QSpinBox(self.widget_2)
-        self.frameIndexSpinBox.setObjectName("frameIndexSpinBox")
-        self.horizontalLayout_2.addWidget(self.frameIndexSpinBox)
-        self.pushButton = QtWidgets.QPushButton(self.widget_2)
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout_2.addWidget(self.pushButton)
-        self.verticalLayout.addWidget(self.widget_2)
+        self.segmentationControl = CheckColorWidget(self.showControl, '分割结果', index=3)
+        self.verticalLayout.addWidget(self.segmentationControl)
+
+        self.label_2 = QtWidgets.QLabel(self.showControl)
+        self.label_2.setObjectName("label_2")
+        self.label_2.setStyleSheet('margin-left: 15px;')
+        self.verticalLayout.addWidget(self.label_2)
+        self.alphaSlider = QtWidgets.QSlider(self.showControl)
+        self.alphaSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.alphaSlider.setObjectName("alphaSlider")
+        self.alphaSlider.setRange(0, 255)
+        self.alphaSlider.setValue(255)
+        self.alphaSlider.setStyleSheet('margin-left: 30px;')
+        self.verticalLayout.addWidget(self.alphaSlider)
+
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
         self.modelChoose = QtWidgets.QFrame(self.centralwidget)
@@ -318,6 +303,7 @@ class Ui_MainWindow(object):
         self.firstControl.setTImage(self.tImage)
         self.secondControl.setTImage(self.tImage)
         self.thirdControl.setTImage(self.tImage)
+        self.segmentationControl.setTImage(self.tImage)
         spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem4)
         self.gridLayout.addWidget(self.transverse, 0, 0, 1, 1)
@@ -476,7 +462,6 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menu.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.colorPickerTrigger.clicked.connect(self.clickColorPickerTrigger)  # 颜色选择器
         self.pushButton.clicked.connect(self.toFrame)
         self.callModelButton.clicked.connect(self.callModel)
         self.setRatioButton.clicked.connect(self.setRatio)
@@ -484,13 +469,9 @@ class Ui_MainWindow(object):
         self.viewSagi.clicked.connect(self.sagittalView)
         self.viewCoro.clicked.connect(self.coronalView)
         self.viewTrans.clicked.connect(self.transverseView)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def clickColorPickerTrigger(self):
-        color = QColorDialog.getColor()
-        if color.isValid():
-            # 在 Label 上显示选择的颜色
-            self.colorLabel.setStyleSheet(f'background-color: {color.name()}')
+        self.alphaSlider.valueChanged.connect(self.tImage.setAlpha)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def importFileAction(self):
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "选择文件", "", "All Files (*)")
@@ -557,7 +538,7 @@ class Ui_MainWindow(object):
         if self.dicomFile is None:
             return
         checkDialog = CheckDialog()
-        checkDialog.start_check(self.dicomFile)
+        checkDialog.start_check(self.dicomFile, self.imageGenerate)
         checkDialog.exec_()
         self.tImage.setPredictions(checkDialog.getPredictions())
 
@@ -565,7 +546,7 @@ class Ui_MainWindow(object):
         if self.dicomFile is None:
             return
         segDialog = SegDialog()
-        segDialog.start_seg(self.dicomFile)
+        segDialog.start_seg(self.dicomFile, self.imageGenerate)
         segDialog.exec_()
         self.tImage.setSegPrediction(segDialog.getPredictions())
 
@@ -574,9 +555,11 @@ class Ui_MainWindow(object):
             return
         if self.checkModel.isChecked():
             self.callCheckModel()
+            self.imageGenerate = True
 
         elif self.segmentationModel.isChecked():
             self.callSegModel()
+            self.imageGenerate = True
 
     def showInfo(self, dicomFile):
         patient = dicomFile.patient
@@ -598,12 +581,11 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "显示控制区"))
         self.label_7.setText(_translate("MainWindow", "检测结果病灶显示："))
         self.label_10.setText(_translate("MainWindow", "分割结果病灶显示："))
+        self.label_14.setText(_translate("MainWindow", "帧显示："))
         self.show_nidus_name.setText(_translate("MainWindow", "显示病灶名称"))
         self.label_9.setText(_translate("MainWindow", "置信度"))
         self.setRatioButton.setText(_translate("MainWindow", "设置置信度"))
         self.label_2.setText(_translate("MainWindow", "病灶透明度"))
-        self.label_3.setText(_translate("MainWindow", "病灶颜色"))
-        self.colorPickerTrigger.setText(_translate("MainWindow", "选择颜色"))
         self.label_4.setText(_translate("MainWindow", "当前帧数"))
         self.pushButton.setText(_translate("MainWindow", "跳转到帧"))
         self.label_5.setText(_translate("MainWindow", "模型选择区"))

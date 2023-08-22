@@ -14,8 +14,9 @@ class CheckThreadAll(QThread):
     progress_name = pyqtSignal(str)
     check_finished = pyqtSignal()
 
-    def __init__(self, dicom=None):
-        super().__init__()
+    def __init__(self, parent=None, dicom=None, generate=False):
+        super().__init__(parent)
+        self.generate = generate
         self.dicom = dicom
         self.predictions = None
 
@@ -51,13 +52,15 @@ class CheckThreadAll(QThread):
                 self.progress_update.emit(i / self.dicom.pixel_array.shape[0] * progress_num)
 
     def getAllCheckResult(self, dicom):
-        if os.path.exists(config.TEMP_CHECK_DIR):
-            shutil.rmtree(config.TEMP_CHECK_DIR)
-        os.mkdir(config.TEMP_CHECK_DIR)
-        self.progress_name.emit('正在处理帧图像...')
-        self.progress_update.emit(0)
-        self.frame2PngAll(config.TEMP_CHECK_DIR)
-        print('store temp check image success')
+        if not self.generate:
+            self.progress_name.emit('正在处理帧图像...')
+            self.progress_update.emit(0)
+            if os.path.exists(config.TEMP_CHECK_DIR):
+                shutil.rmtree(config.TEMP_CHECK_DIR)
+            os.mkdir(config.TEMP_CHECK_DIR)
+            self.frame2PngAll(config.TEMP_CHECK_DIR)
+            print('store temp check image success')
+            self.generate = True
         self.progress_update.emit(50)
 
         self.progress_name.emit('正在检测...')
@@ -77,9 +80,9 @@ class CheckThreadAll(QThread):
                 predictions += response.json()['predictions']
                 print('get check prediction success' + str(i))
                 self.progress_update.emit(50 + 50 * i / batch)
-                self.progress_update.emit(100)
-                self.progress_name.emit('检测完成!')
-                return predictions
+            self.progress_update.emit(100)
+            self.progress_name.emit('检测完成!')
+            return predictions
         except requests.exceptions.RequestException as e:
             self.progress_update.emit(-1)
             self.progress_name.emit('请求错误')
@@ -108,8 +111,8 @@ class CheckDialog(QtWidgets.QDialog):
     def update_label(self, value):
         self.ui.setLabel(value)
 
-    def start_check(self, dicom):
-        self.thread = CheckThreadAll(dicom)
+    def start_check(self, dicom, generate=False):
+        self.thread = CheckThreadAll(self, dicom, generate)
         self.thread.progress_update.connect(self.update_progress)
         self.thread.progress_name.connect(self.update_label)
         self.thread.check_finished.connect(self.close)

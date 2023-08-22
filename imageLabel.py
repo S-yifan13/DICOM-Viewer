@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QLabel, QApplication
-from PyQt5.QtGui import QImage, QPixmap, QPen, QPainter
+from PyQt5.QtGui import QImage, QPixmap, QPen, QPainter, QColor
 import numpy as np
 import config
 
@@ -43,8 +43,8 @@ class ImageLabel(QLabel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.draw_check = [False, False, False]
-        self.check_color = [Qt.white, Qt.white, Qt.white]
-        self.predictions = None
+        self.check_color = [Qt.white, Qt.white, Qt.white, Qt.white]
+        self.check_predictions = None
         self.frames = []
         self.frame_index = 0
         self.setScaledContents(True)
@@ -57,11 +57,11 @@ class ImageLabel(QLabel):
         self.c_label = None
         self.show_name = False
         self.show_name_checkbox = None
-        self.seg_prediction = None
-        self.draw_seg = True
+        self.seg_predictions = None
+        self.draw_seg = False
 
-    def setSegPrediction(self, seg_prediction):
-        self.seg_prediction = seg_prediction
+    def setSegPrediction(self, seg_predictions):
+        self.seg_predictions = seg_predictions
         self.update()
     
     def setShowName(self, show_name):
@@ -84,6 +84,15 @@ class ImageLabel(QLabel):
             self.s_label.setTotalFrame(len(self.frames))
         if self.c_label is not None:
             self.c_label.setTotalFrame(len(self.frames))
+
+    def setAlpha(self, value):
+        if type(self.check_color[3]) is not QColor:
+            color = QColor(self.check_color[3])
+            color.setAlpha(value)
+            self.check_color[3] = color
+        else:
+            self.check_color[3].setAlpha(value)
+        self.update()
 
     def wheelEvent(self, event):
         frame_count = self.frames.shape[0]
@@ -138,12 +147,20 @@ class ImageLabel(QLabel):
         self.c_label.setFrameIndex(frame_index)
 
     def showCheckPrediction(self, i):
-        self.draw_check[i] = True
-        self.update()
+        if 0 <= i < 3:
+            self.draw_check[i] = True
+            self.update()
+        elif i == 3:
+            self.draw_seg = True
+            self.update()
 
     def hideCheckPrediction(self, i):
-        self.draw_check[i] = False
-        self.update()
+        if 0 <= i < 3:
+            self.draw_check[i] = False
+            self.update()
+        elif i == 3:
+            self.draw_seg = False
+            self.update()
 
     def setColor(self, i, color):
         self.check_color[i] = color
@@ -152,20 +169,21 @@ class ImageLabel(QLabel):
     def paintEvent(self, event):
         super().paintEvent(event)
         painter = QPainter(self)
-        if self.predictions is not None:
+        if self.check_predictions is not None:
             for i in range(3):
                 text = nidus_type[i] if self.show_name else None
                 if self.draw_check[i]:
-                    prediction = self.predictions[self.frame_index][nidus_type[i]]
+                    prediction = self.check_predictions[self.frame_index][nidus_type[i]]
                     drawOneRect(painter, prediction, self.check_color[i], self.scale,
                                 left_start=self.left_start, top_start=self.top_start,
                                 text=text)
 
-        if self.draw_seg and self.seg_prediction is not None:
-            draw_seg(self.seg_prediction, painter, Qt.red, self.scale, self.left_start, self.top_start)
+        if self.seg_predictions is not None and self.draw_seg:
+            prediction = self.seg_predictions[self.frame_index]
+            draw_seg(prediction, painter, self.check_color[3], self.scale, self.left_start, self.top_start)
 
     def setPredictions(self, predictions):
-        self.predictions = predictions
+        self.check_predictions = predictions
 
     def setScale(self, scale):
         self.scale = scale
@@ -173,14 +191,18 @@ class ImageLabel(QLabel):
     def getPixmapPainted(self):
         pixmap = self.pixmap().copy()
         painter = QPainter(pixmap)
-        if self.predictions is not None:
+        if self.check_predictions is not None:
             for i in range(3):
                 text = nidus_type[i] if self.show_name else None
                 if self.draw_check[i]:
-                    prediction = self.predictions[self.frame_index][self.frame_index][nidus_type[i]]
+                    prediction = self.check_predictions[self.frame_index][self.frame_index][nidus_type[i]]
                     drawOneRect(painter, prediction, self.check_color[i], self.scale,
                                 left_start=self.left_start, top_start=self.top_start,
                                 text=text)
+        if self.seg_predictions is not None and self.draw_seg:
+            prediction = self.seg_predictions[self.frame_index]
+            draw_seg(prediction, painter, self.check_color[3], self.scale, self.left_start, self.top_start)
+
         return pixmap
 
     def setStart(self, left_start, top_start):

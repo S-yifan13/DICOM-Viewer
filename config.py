@@ -6,10 +6,11 @@ SEGMENTATION_MODEL_URL = 'http://10.212.253.234:8612/segmentation'
 # path
 TEMP_DIR = 'temp'
 DATA_DIR = 'data'
-TEMP_CHECK_DIR = 'temp/check/'
+TEMP_CHECK_DIR = TEMP_SEG_DIR = 'temp/check/'
 
 # args
 MIN_CHECK_SHOW_RATIO = 0.7
 IMAGE_WIDTH = 615
 CHECK_BATCH_SIZE = 30
+SEG_BATCH_SIZE = 30
 NIDUS_TYPE = ['js', 'kq', 'xs']
