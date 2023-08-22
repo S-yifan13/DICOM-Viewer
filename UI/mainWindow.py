@@ -48,6 +48,8 @@ class Ui_MainWindow(object):
     def __init__(self):
         self.dicomFile = None
         self.imageGenerate = True
+        self.callCheck = False
+        self.callSeg = False
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -166,6 +168,15 @@ class Ui_MainWindow(object):
         self.alphaSlider.setValue(255)
         self.alphaSlider.setStyleSheet('margin-left: 30px;')
         self.verticalLayout.addWidget(self.alphaSlider)
+
+        self.label_25 = QtWidgets.QLabel(self.showControl)
+        self.label_25.setStyleSheet("font-weight: bold; color:rgb(0, 0, 127);margin-top:5px")
+        self.label_25.setObjectName("label_25")
+        self.verticalLayout.addWidget(self.label_25)
+        self.checkPolar = QtWidgets.QCheckBox(self.showControl)
+        self.checkPolar.setStyleSheet("margin-left: 15px; margin-top: 2px")
+        self.checkPolar.setObjectName("checkPolar")
+        self.verticalLayout.addWidget(self.checkPolar)
 
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
@@ -360,33 +371,50 @@ class Ui_MainWindow(object):
         spacerItem12 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_5.addItem(spacerItem12)
         self.gridLayout.addWidget(self.sagittal, 0, 1, 1, 1)
-        self.frame_7 = QtWidgets.QFrame(self.rhreeView)
-        self.frame_7.setAutoFillBackground(False)
-        self.frame_7.setStyleSheet("background-color: rgb(0, 0, 0);")
-        self.frame_7.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_7.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_7.setObjectName("frame_7")
-        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.frame_7)
+
+        self.polar = QtWidgets.QFrame(self.rhreeView)
+        self.polar.setAutoFillBackground(False)
+        self.polar.setStyleSheet("background-color: rgb(0, 0, 0);")
+        self.polar.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.polar.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.polar.setObjectName("polar")
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.polar)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
-        self.label_22 = QtWidgets.QLabel(self.frame_7)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.widget_9 = QtWidgets.QWidget(self.polar)
+        self.horizontalLayout_12 = QtWidgets.QHBoxLayout(self.widget_9)
+        self.horizontalLayout_12.setContentsMargins(-1, 0, -1, 11)
+        self.horizontalLayout_12.setSpacing(0)
+        self.horizontalLayout_12.setObjectName("horizontalLayout_12")
+        self.label_22 = QtWidgets.QLabel(self.widget_9)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_22.sizePolicy().hasHeightForWidth())
         self.label_22.setSizePolicy(sizePolicy)
         self.label_22.setStyleSheet("color:rgb(255, 255, 255);font-weight: bold; font-size: 15;")
-        self.label_22.setText("")
         self.label_22.setObjectName("label_22")
-        self.verticalLayout_6.addWidget(self.label_22)
+        self.horizontalLayout_12.addWidget(self.label_22)
+        self.viewPolar = QtWidgets.QPushButton(self.widget_9)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.viewPolar.sizePolicy().hasHeightForWidth())
+        self.viewPolar.setSizePolicy(sizePolicy)
+        self.viewPolar.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.viewPolar.setStyleSheet("color: rgb(255, 255, 255);font-weight: bold; font-size: 15;")
+        self.viewPolar.setObjectName("viewPolar")
+        self.horizontalLayout_12.addWidget(self.viewPolar)
+        self.verticalLayout_6.addWidget(self.widget_9)
         spacerItem7 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_6.addItem(spacerItem7)
-        self.label_23 = QtWidgets.QLabel(self.frame_7)
-        self.label_23.setText("")
-        self.label_23.setObjectName("label_23")
-        self.verticalLayout_6.addWidget(self.label_23)
+        self.pImage =SCImageLabel(self.polar, False)
+        self.pImage.setText('')
+        self.pImage.setObjectName("pImage")
+        self.verticalLayout_6.addWidget(self.pImage)
         spacerItem8 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_6.addItem(spacerItem8)
-        self.gridLayout.addWidget(self.frame_7, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.polar, 1, 0, 1, 1)
+
         self.coronal = QtWidgets.QFrame(self.rhreeView)
         self.coronal.setAutoFillBackground(False)
         self.coronal.setStyleSheet("background-color: rgb(0, 0, 0);")
@@ -432,7 +460,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_7.addItem(spacerItem10)
         self.gridLayout.addWidget(self.coronal, 1, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
-        self.tImage.setSCLabel(self.sImage, self.cImage)
+        self.tImage.setSCPLabel(self.sImage, self.cImage, self.pImage)
 
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1835, 26))
@@ -469,6 +497,7 @@ class Ui_MainWindow(object):
         self.viewSagi.clicked.connect(self.sagittalView)
         self.viewCoro.clicked.connect(self.coronalView)
         self.viewTrans.clicked.connect(self.transverseView)
+        self.viewPolar.clicked.connect(self.polarView)
 
         self.alphaSlider.valueChanged.connect(self.tImage.setAlpha)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -504,21 +533,24 @@ class Ui_MainWindow(object):
             upload_dialog.exec_()
 
     def showImage(self, dicomFile):
+        self.tImage.setStart(dicomFile.transverseMinX, dicomFile.transverseMinY, dicomFile.transverseMaxX)
         scale = config.IMAGE_WIDTH / dicomFile.columns  # 宽度
         print("scale:", scale)
         self.tImage.setScale(scale)
         self.sImage.setScale(scale)
         self.cImage.setScale(scale)
+        self.pImage.setScale(scale)
         self.tImage.setFixedSize(config.IMAGE_WIDTH, dicomFile.transverseHeight * scale)
         self.sImage.setFixedSize(config.IMAGE_WIDTH, dicomFile.longitudinalHeight * scale)
         self.cImage.setFixedSize(config.IMAGE_WIDTH, dicomFile.longitudinalHeight * scale)
+        self.pImage.setFixedSize(config.IMAGE_WIDTH, dicomFile.transverseHeight / 2 * scale * scale)
         self.frameIndexSpinBox.setRange(1, dicomFile.frame_count)
+        self.tImage.setPolarCheckbox(self.checkPolar)
         self.tImage.setFrames(dicomFile.pixelAllTransverse())
         self.tImage.setSlider(self.frameIndexSlider, dicomFile.frame_count)
         self.tImage.setLabel(self.frameIndexLable)
-        self.tImage.setStart(dicomFile.transverseMinX, dicomFile.transverseMinY)
-        showCertainImage(self.sImage, dicomFile.pixelSagittal())
-        showCertainImage(self.cImage, dicomFile.pixelCoronal())
+        self.sImage.showCertainImage(dicomFile.pixelSagittal())
+        self.cImage.showCertainImage(dicomFile.pixelCoronal())
         self.tImage.setShowNameCheckbox(self.show_nidus_name)
 
     def toFrame(self):
@@ -526,13 +558,20 @@ class Ui_MainWindow(object):
             self.tImage.setFrameIndex(self.frameIndexSpinBox.value() - 1)
 
     def transverseView(self):
-        imageView(self.tImage.getPixmapPainted())
+        if self.dicomFile:
+            imageView(self.tImage.getPixmapPainted())
 
     def sagittalView(self):
-        imageView(self.sImage.getPixmapPainted())
+        if self.dicomFile:
+            imageView(self.sImage.getPixmapPainted())
 
     def coronalView(self):
-        imageView(self.cImage.getPixmapPainted())
+        if self.dicomFile:
+            imageView(self.cImage.getPixmapPainted())
+
+    def polarView(self):
+        if self.dicomFile:
+            imageView(self.pImage.getPixmapPainted())
 
     def callCheckModel(self):
         if self.dicomFile is None:
@@ -553,13 +592,15 @@ class Ui_MainWindow(object):
     def callModel(self):
         if self.dicomFile is None:
             return
-        if self.checkModel.isChecked():
+        if self.checkModel.isChecked() and self.callCheck is False:
             self.callCheckModel()
             self.imageGenerate = True
+            self.callCheck = True
 
-        elif self.segmentationModel.isChecked():
+        elif self.segmentationModel.isChecked() and self.callSeg is False:
             self.callSegModel()
             self.imageGenerate = True
+            self.callSeg = True
 
     def showInfo(self, dicomFile):
         patient = dicomFile.patient
@@ -581,6 +622,7 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "显示控制区"))
         self.label_7.setText(_translate("MainWindow", "检测结果病灶显示："))
         self.label_10.setText(_translate("MainWindow", "分割结果病灶显示："))
+        self.label_25.setText(_translate("MainWindow", "极坐标视图显示："))
         self.label_14.setText(_translate("MainWindow", "帧显示："))
         self.show_nidus_name.setText(_translate("MainWindow", "显示病灶名称"))
         self.label_9.setText(_translate("MainWindow", "置信度"))
@@ -590,6 +632,7 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "跳转到帧"))
         self.label_5.setText(_translate("MainWindow", "模型选择区"))
         self.checkModel.setText(_translate("MainWindow", "检测算法"))
+        self.checkPolar.setText(_translate("MainWindow", "极坐标视图显示"))
         self.segmentationModel.setText(_translate("MainWindow", "分割算法"))
         self.callModelButton.setText(_translate("MainWindow", "确定调用"))
         self.label_6.setText(_translate("MainWindow", "病人信息"))
@@ -608,6 +651,8 @@ class Ui_MainWindow(object):
         self.viewCoro.setText(_translate("MainWindow", "点击查看"))
         self.label_20.setText(_translate("MainWindow", "矢状面 Sagittal View"))
         self.viewSagi.setText(_translate("MainWindow", "点击查看"))
+        self.label_22.setText(_translate("MainWindow", "极坐标视图 Polar View"))
+        self.viewPolar.setText(_translate("MainWindow", "点击查看"))
         self.label_18.setText(_translate("MainWindow", "轴位面 Transverse View"))
         self.viewTrans.setText(_translate("MainWindow", "点击查看"))
         self.menu.setTitle(_translate("MainWindow", "文件"))

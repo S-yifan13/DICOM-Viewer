@@ -1,17 +1,28 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPainter, QPen
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtGui import QPainter, QPen, QImage, QPixmap
+from PyQt5.QtWidgets import QLabel, QSizePolicy
 
 
 class SCImageLabel(QLabel):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, show_line=True):
         super().__init__(parent)
         # 设置初始的缩放级别
         self.scale_factor = 1.0
         self.frame_index = 0
         self.total_frame = 0
+        self.showLine = show_line
 
-    def showImage(self, pixmap):
+
+
+    def showCertainImage(self, pixel_array):
+        self.setScaledContents(True)
+        height, width, channel = pixel_array.shape
+        bytes_per_line = channel * width
+        color_format = QImage.Format_RGB888
+        if channel == 4:
+            color_format = QImage.Format_ARGB32
+        image = QImage(pixel_array, width, height, bytes_per_line, color_format)
+        pixmap = QPixmap.fromImage(image)
         self.setPixmap(pixmap.scaled(pixmap.size() * self.scale_factor, aspectRatioMode=Qt.KeepAspectRatio))
 
     def getX(self):
@@ -44,6 +55,7 @@ class SCImageLabel(QLabel):
     def getPixmapPainted(self):
         pixmap = self.pixmap()
         painter = QPainter(pixmap)
-        self.drawOneLine(painter)
+        if self.showLine:
+            self.drawOneLine(painter)
         return pixmap
 
