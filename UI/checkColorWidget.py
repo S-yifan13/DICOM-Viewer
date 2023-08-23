@@ -55,7 +55,7 @@ class CheckColorWidget(QWidget):
     def checkChange(self):
         # if self.ui.checkBox.isChecked() and self.prediction is not None:
         if self.ui.checkBox.isChecked():
-            self.tImage.showCheckPrediction(self.index)
+            self.tImage.setCheckPrediction(self.index, True)
         else:
-            self.tImage.hideCheckPrediction(self.index)
+            self.tImage.setCheckPrediction(self.index, False)
 

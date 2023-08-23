@@ -12,5 +12,6 @@ TEMP_CHECK_DIR = TEMP_SEG_DIR = 'temp/check/'
 MIN_CHECK_SHOW_RATIO = 0.7
 IMAGE_WIDTH = 615
 CHECK_BATCH_SIZE = 30
-SEG_BATCH_SIZE = 30
+SEG_BATCH_SIZE = 10
 NIDUS_TYPE = ['js', 'kq', 'xs']
+NIDUS_SEG = ['纤维斑块', '钙化斑块', '带薄纤维帽的脂质池']

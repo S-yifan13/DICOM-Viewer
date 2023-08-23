@@ -22,7 +22,7 @@ class SegThreadAll(QThread):
         self.predictions = None
         self.generate = generate
 
-    def frame2PngAll(self, target_path, progress_num=50):
+    def frame2PngAll(self, target_path, progress_num=20):
         if self.dicom is not None:
             for i in range(self.dicom.pixel_array.shape[0]):
                 self.dicom.frame2Png(i, target_path + str(i) + '.png')
@@ -38,7 +38,7 @@ class SegThreadAll(QThread):
             self.frame2PngAll(config.TEMP_SEG_DIR)
             print('store temp seg image success')
             self.generate = True
-        self.progress_update.emit(50)
+        self.progress_update.emit(20)
         self.progress_name.emit('正在检测...')
         batch_size = config.SEG_BATCH_SIZE
         batch = dicom.frame_count // batch_size + 1
@@ -50,12 +50,12 @@ class SegThreadAll(QThread):
                     size = dicom.frame_count - i * batch_size
                 files = []
                 for j in range(batch_size * i, batch_size * i + size):
-                    temp_path = config.TEMP_CHECK_DIR + "{}.png".format(i)
+                    temp_path = config.TEMP_CHECK_DIR + "{}.png".format(j)
                     files.append(('image', open(temp_path, 'rb')))
                 response = requests.post(config.SEGMENTATION_MODEL_URL, files=files)
                 predictions += response.json()['predictions']
                 print('get check prediction success' + str(i))
-                self.progress_update.emit(50 + 50 * i / batch)
+                self.progress_update.emit(20 + 80 * i / batch)
             self.progress_update.emit(100)
             self.progress_name.emit('检测完成!')
             return predictions
@@ -125,9 +125,13 @@ class SegDialog(QDialog):
         self.thread.seg_finished.connect(self.close)
         self.thread.start()
 
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
     dialog = SegDialog()
     dialog.show()
-    dialog.start_seg(Dicom('data/data'))
+    dialog.start_seg(Dicom('data/oct_20_May_2022_14-16-51'), True)
+    predictions = dialog.getPredictions()
+    file = open('data/predictions.txt', 'w')
+    file.write(str(predictions))
     app.exec_()

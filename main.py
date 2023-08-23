@@ -13,7 +13,6 @@ class DicomViewer(QMainWindow, mainWindow.Ui_MainWindow):
         pass
 
 def main():
-    print(1)
     app = QApplication(sys.argv)
     myWindow = DicomViewer()
     myWindow.show()

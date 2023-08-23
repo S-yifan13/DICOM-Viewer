@@ -8,6 +8,8 @@ import config
 
 from UI.progressDialog import Ui_progressDialog
 from dicomUtil import Dicom
+from segDialog import SegDialog
+
 
 class CheckThreadAll(QThread):
     progress_update = pyqtSignal(float)
@@ -45,7 +47,7 @@ class CheckThreadAll(QThread):
             os.remove(temp_path)
             return False
 
-    def frame2PngAll(self, target_path, progress_num=50):
+    def frame2PngAll(self, target_path, progress_num=20):
         if self.dicom is not None:
             for i in range(self.dicom.pixel_array.shape[0]):
                 self.dicom.frame2Png(i, target_path + str(i) + '.png')
@@ -61,7 +63,7 @@ class CheckThreadAll(QThread):
             self.frame2PngAll(config.TEMP_CHECK_DIR)
             print('store temp check image success')
             self.generate = True
-        self.progress_update.emit(50)
+        self.progress_update.emit(20)
 
         self.progress_name.emit('正在检测...')
         batch_size = config.CHECK_BATCH_SIZE
@@ -74,12 +76,12 @@ class CheckThreadAll(QThread):
                     size = dicom.frame_count - i * batch_size
                 files = []
                 for j in range(batch_size * i, batch_size * i + size):
-                    temp_path = config.TEMP_CHECK_DIR + "{}.png".format(i)
+                    temp_path = config.TEMP_CHECK_DIR + "{}.png".format(j)
                     files.append(('image', open(temp_path, 'rb')))
                 response = requests.post(config.CHECK_MODEL_URL, files=files)
                 predictions += response.json()['predictions']
                 print('get check prediction success' + str(i))
-                self.progress_update.emit(50 + 50 * i / batch)
+                self.progress_update.emit(20 + 80 * i / batch)
             self.progress_update.emit(100)
             self.progress_name.emit('检测完成!')
             return predictions
@@ -124,7 +126,23 @@ class CheckDialog(QtWidgets.QDialog):
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
+    dicom = Dicom('data/oct_20_May_2022_14-16-51')
+
     dialog = CheckDialog()
     dialog.show()
-    dialog.start_check(Dicom('data/data'))
+    dialog.start_check(dicom, True)
+    dialog.exec_()
+    predictions = dialog.getPredictions()
+    file = open('data/predictions_check.txt', 'w')
+    file.write(str(predictions))
+    file.close()
+
+    dialog = SegDialog()
+    dialog.show()
+    dialog.start_seg(dicom, True)
+    dialog.exec_()
+    predictions = dialog.getPredictions()
+    file = open('data/predictions_seg.txt', 'w')
+    file.write(str(predictions))
+    file.close()
     app.exec_()

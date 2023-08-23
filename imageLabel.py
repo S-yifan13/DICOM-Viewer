@@ -31,7 +31,7 @@ def drawOneRect(painter, prediction, color, scale=1, left_start=0, top_start=0, 
             painter.setFont(font)
             painter.drawText(int(left_top_x), int(left_top_y) - 3, text)
 
-def draw_seg(array, painter, color, scale=1, left_start=0, top_start=0):
+def draw_seg_nidus(array, painter, color, scale=1, left_start=0, top_start=0):
     pen = QPen(color)
     painter.setPen(pen)
     for point in array:
@@ -44,7 +44,7 @@ class ImageLabel(QLabel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.draw_check = [False, False, False]
-        self.check_color = [Qt.white, Qt.white, Qt.white, Qt.white]
+        self.check_color = [Qt.white, Qt.white, Qt.white, Qt.white, Qt.white, Qt.white]
         self.check_predictions = None
         self.frames = []
         self.frame_index = 0
@@ -60,10 +60,11 @@ class ImageLabel(QLabel):
         self.show_name = False
         self.show_name_checkbox = None
         self.seg_predictions = None
-        self.draw_seg = False
+        self.draw_seg = [False, False, False]
         self.p_label = None
         self.polar_show = False
         self.polar_checkbox = None
+        self.model_info = None
 
     def setSegPrediction(self, seg_predictions):
         self.seg_predictions = seg_predictions
@@ -116,12 +117,13 @@ class ImageLabel(QLabel):
             self.c_label.setTotalFrame(len(self.frames))
 
     def setAlpha(self, value):
-        if type(self.check_color[3]) is not QColor:
-            color = QColor(self.check_color[3])
-            color.setAlpha(value)
-            self.check_color[3] = color
-        else:
-            self.check_color[3].setAlpha(value)
+        for i in range(3, 6):
+            if type(self.check_color[i]) is not QColor:
+                color = QColor(self.check_color[3])
+                color.setAlpha(value)
+                self.check_color[i] = color
+            else:
+                self.check_color[i].setAlpha(value)
         self.update()
 
     def wheelEvent(self, event):
@@ -144,6 +146,7 @@ class ImageLabel(QLabel):
             image = QImage(pixel_array.data, width, height, bytes_per_line, QImage.Format_RGB888)
             pixmap = QPixmap.fromImage(image)
             self.setPixmap(pixmap.scaled(pixmap.size() * self.scale, aspectRatioMode=Qt.KeepAspectRatio))
+            self.changeModelInfo()
 
         elif self.frame_index < 0:
             self.frame_index = 0
@@ -177,22 +180,13 @@ class ImageLabel(QLabel):
         self.s_label.setFrameIndex(frame_index)
         self.c_label.setFrameIndex(frame_index)
 
-    def showCheckPrediction(self, i):
+    def setCheckPrediction(self, i, value):
         self.hidePolar()
         if 0 <= i < 3:
-            self.draw_check[i] = True
+            self.draw_check[i] = value
             self.update()
-        elif i == 3:
-            self.draw_seg = True
-            self.update()
-
-    def hideCheckPrediction(self, i):
-        self.hidePolar()
-        if 0 <= i < 3:
-            self.draw_check[i] = False
-            self.update()
-        elif i == 3:
-            self.draw_seg = False
+        elif 3 <= i < 5:
+            self.draw_seg[i-3] = value
             self.update()
 
     def setColor(self, i, color):
@@ -219,9 +213,11 @@ class ImageLabel(QLabel):
                                 left_start=self.left_start, top_start=self.top_start,
                                 text=text)
 
-        if self.seg_predictions is not None and self.draw_seg:
-            prediction = self.seg_predictions[self.frame_index]
-            draw_seg(prediction, painter, self.check_color[3], self.scale, self.left_start, self.top_start)
+        if self.seg_predictions is not None:
+            for i in range(3):
+                if self.draw_seg[i]:
+                    prediction = self.seg_predictions[self.frame_index][str(i + 1)]
+                    draw_seg_nidus(prediction, painter, self.check_color[3], self.scale, self.left_start, self.top_start)
 
     def setPredictions(self, predictions):
         self.check_predictions = predictions
@@ -240,9 +236,11 @@ class ImageLabel(QLabel):
                     drawOneRect(painter, prediction, self.check_color[i], self.scale,
                                 left_start=self.left_start, top_start=self.top_start,
                                 text=text)
-        if self.seg_predictions is not None and self.draw_seg:
-            prediction = self.seg_predictions[self.frame_index]
-            draw_seg(prediction, painter, self.check_color[3], self.scale, self.left_start, self.top_start)
+        if self.seg_predictions is not None:
+            for i in range(3):
+                if self.draw_seg[i]:
+                    prediction = self.seg_predictions[self.frame_index][str(i + 1)]
+                    draw_seg_nidus(prediction, painter, self.check_color[3], self.scale, self.left_start, self.top_start)
 
         return pixmap
 
@@ -250,3 +248,36 @@ class ImageLabel(QLabel):
         self.left_start = left_start
         self.top_start = top_start
         self.left_end = left_end
+
+    def changeModelInfo(self):
+        if self.model_info is None:
+            return
+        string = '第' + str(self.frame_index) + '帧'
+        if self.check_predictions is None and self.seg_predictions is None:
+            self.model_info.setText(string + '未进行检测或分割')
+        else:
+            nidus_str = ''
+            nidus_count = 0
+            if self.check_predictions is not None:
+                nidus_check = self.check_predictions[self.frame_index]
+                for i in range(3):
+                    count = 0
+                    for k in nidus_check[nidus_type[i]]:
+                        if k[4] > config.MIN_CHECK_SHOW_RATIO:
+                            count += 1
+                    if count > 0:
+                        nidus_str += nidus_type[i] + ','
+                        nidus_count += 1
+            elif self.seg_predictions is not None:
+                nidus_seg = self.seg_predictions[self.frame_index]
+                for i in range(3):
+                    if len(nidus_seg[str(i + 1)]) > 0:
+                        nidus_str += nidus_type[i] + ','
+                        nidus_count += 1
+            if len(nidus_str) == 0:
+                string += '未检测到病灶'
+            else:
+                string += '共检测到病灶{}种，类型包括：'.format(nidus_count) + nidus_str[:-1]
+
+
+
