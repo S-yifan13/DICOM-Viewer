@@ -4,16 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08dbc0ef-a229-4837-bd77-8c507d1f8862" name="更改" comment="add: 极坐标视图完成">
+    <list default="true" id="08dbc0ef-a229-4837-bd77-8c507d1f8862" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/checkColorWidget.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/checkColorWidget.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/mainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/mainWindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/checkDialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/checkDialog.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/imageLabel.py" beforeDir="false" afterPath="$PROJECT_DIR$/imageLabel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/segDialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/segDialog.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/to3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/to3D.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pdfUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/pdfUtil.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reportDialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/reportDialog.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +64,7 @@
       <recent name="D:\实习\DicomViewer\UI" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.checkDialog">
+  <component name="RunManager" selected="Python.main">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="DicomViewer" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -224,10 +221,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.reportDialog" />
         <item itemvalue="Python.checkDialog" />
         <item itemvalue="Python.polar" />
         <item itemvalue="Python.callModel" />
-        <item itemvalue="Python.reportDialog" />
         <item itemvalue="Python.image" />
       </list>
     </recent_temporary>
@@ -278,7 +275,8 @@
       <workItem from="1692709252486" duration="9626000" />
       <workItem from="1692719600776" duration="2026000" />
       <workItem from="1692768382740" duration="8991000" />
-      <workItem from="1692785907233" duration="1202000" />
+      <workItem from="1692785907233" duration="8408000" />
+      <workItem from="1692796235979" duration="902000" />
     </task>
     <task id="LOCAL-00001" summary="add: dicom类，信息读取、绘制三视图">
       <created>1690789206776</created>
@@ -412,7 +410,15 @@
       <option name="project" value="LOCAL" />
       <updated>1692714504565</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="add: 病灶bug+显示">
+      <option name="closed" value="true" />
+      <created>1692788656316</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1692788656316</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -445,7 +451,8 @@
     <MESSAGE value="add: 分割算法完成" />
     <MESSAGE value="add: 极坐标" />
     <MESSAGE value="add: 极坐标视图完成" />
-    <option name="LAST_COMMIT_MESSAGE" value="add: 极坐标视图完成" />
+    <MESSAGE value="add: 病灶bug+显示" />
+    <option name="LAST_COMMIT_MESSAGE" value="add: 病灶bug+显示" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -464,11 +471,6 @@
           <url>file://$PROJECT_DIR$/searchDialog.py</url>
           <line>37</line>
           <option name="timeStamp" value="94" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/reportDialog.py</url>
-          <line>108</line>
-          <option name="timeStamp" value="96" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/segDialog.py</url>
@@ -490,11 +492,6 @@
           <line>242</line>
           <option name="timeStamp" value="135" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/checkDialog.py</url>
-          <line>132</line>
-          <option name="timeStamp" value="137" />
-        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -511,8 +508,8 @@
     <SUITE FILE_PATH="coverage/DicomViewer$mainWindow.coverage" NAME="mainWindow 覆盖结果" MODIFIED="1690869895625" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UI" />
     <SUITE FILE_PATH="coverage/DicomViewer$colorPicker.coverage" NAME="colorPicker 覆盖结果" MODIFIED="1690816594624" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UI" />
     <SUITE FILE_PATH="coverage/DicomViewer$url.coverage" NAME="url 覆盖结果" MODIFIED="1691594647899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/DicomViewer$reportDialog.coverage" NAME="reportDialog 覆盖结果" MODIFIED="1692430016861" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/DicomViewer$main.coverage" NAME="main 覆盖结果" MODIFIED="1692776848322" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/DicomViewer$reportDialog.coverage" NAME="reportDialog 覆盖结果" MODIFIED="1692793490623" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/DicomViewer$main.coverage" NAME="main 覆盖结果" MODIFIED="1692797021108" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/DicomViewer$callModel.coverage" NAME="callModel 覆盖结果" MODIFIED="1692198757959" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/DicomViewer$fileUtil.coverage" NAME="fileUtil 覆盖结果" MODIFIED="1690808874475" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/DicomViewer$searchDialog.coverage" NAME="searchDialog 覆盖结果" MODIFIED="1692194718892" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

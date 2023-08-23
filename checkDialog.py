@@ -8,7 +8,7 @@ import config
 
 from UI.progressDialog import Ui_progressDialog
 from dicomUtil import Dicom
-from segDialog import SegDialog
+# from segDialog import SegDialog
 
 
 class CheckThreadAll(QThread):
@@ -137,12 +137,12 @@ if __name__ == '__main__':
     file.write(str(predictions))
     file.close()
 
-    dialog = SegDialog()
-    dialog.show()
-    dialog.start_seg(dicom, True)
-    dialog.exec_()
-    predictions = dialog.getPredictions()
-    file = open('data/predictions_seg.txt', 'w')
-    file.write(str(predictions))
-    file.close()
+    # dialog = SegDialog()
+    # dialog.show()
+    # dialog.start_seg(dicom, True)
+    # dialog.exec_()
+    # predictions = dialog.getPredictions()
+    # file = open('data/predictions_seg.txt', 'w')
+    # file.write(str(predictions))
+    # file.close()
     app.exec_()

@@ -268,7 +268,7 @@ class ImageLabel(QLabel):
                     if count > 0:
                         nidus_str += nidus_type[i] + ','
                         nidus_count += 1
-            elif self.seg_predictions is not None:
+            if self.seg_predictions is not None:
                 nidus_seg = self.seg_predictions[self.frame_index]
                 for i in range(3):
                     if len(nidus_seg[str(i + 1)]) > 0:
@@ -278,6 +278,7 @@ class ImageLabel(QLabel):
                 string += '未检测到病灶'
             else:
                 string += '共检测到病灶{}种，类型包括：'.format(nidus_count) + nidus_str[:-1]
+            self.model_info.setText(string)
 
 
 

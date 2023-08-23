@@ -3,6 +3,7 @@ import sys
 
 import requests
 
+from reportDialog import ReportDialog
 from searchDialog import SearchDialog, getAllDicom
 from UI.checkColorWidget import CheckColorWidget
 from UI.imageViewer import ImageViewDialog
@@ -20,7 +21,7 @@ from imageLabel import ImageLabel
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtWidgets import QColorDialog, QLabel
+from PyQt5.QtWidgets import QColorDialog, QLabel, QFileDialog
 
 from dicomUtil import Dicom
 from scImageLabel import SCImageLabel
@@ -270,7 +271,15 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.label_26)
         self.modelInfo = QtWidgets.QLabel(self.Info)
         self.modelInfo.setObjectName("modelInfo")
+        self.modelInfo.setWordWrap(True)
         self.verticalLayout_3.addWidget(self.modelInfo)
+        self.reportButton = QtWidgets.QPushButton(self.Info)
+        self.reportButton.setObjectName("reportButton")
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        self.reportButton.setSizePolicy(sizePolicy)
+        self.verticalLayout_3.addWidget(self.reportButton)
         spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_3.addItem(spacerItem2)
 
@@ -511,6 +520,7 @@ class Ui_MainWindow(object):
         self.pushButton.clicked.connect(self.toFrame)
         self.callModelButton.clicked.connect(self.callModel)
         self.setRatioButton.clicked.connect(self.setRatio)
+        self.reportButton.clicked.connect(self.generatePdf)
 
         self.viewSagi.clicked.connect(self.sagittalView)
         self.viewCoro.clicked.connect(self.coronalView)
@@ -531,6 +541,17 @@ class Ui_MainWindow(object):
 
     def exportFileAction(self):
         pass
+
+    def generatePdf(self):
+        if self.dicomFile is None:
+            return
+        file_dialog = QFileDialog.getSaveFileName(self, 'Save File', '', 'PDF Files (*.pdf)')
+        if file_dialog[0]:
+            out_path = file_dialog[0]
+            print("export pdf to:", out_path)
+            reportDialog = ReportDialog()
+            reportDialog.start_report(out_path, self.tImage.check_predictions, self.tImage.seg_predictions)
+            reportDialog.exec_()
 
     def searchFileAction(self):
         table_data = getAllDicom()
@@ -675,6 +696,7 @@ class Ui_MainWindow(object):
         self.viewPolar.setText(_translate("MainWindow", "点击查看"))
         self.label_18.setText(_translate("MainWindow", "轴位面 Transverse View"))
         self.viewTrans.setText(_translate("MainWindow", "点击查看"))
+        self.reportButton.setText(_translate("MainWindow", "智能诊断报告"))
         self.menu.setTitle(_translate("MainWindow", "文件"))
         self.importFile.setText(_translate("MainWindow", "导入"))
         self.exportFile.setText(_translate("MainWindow", "导出"))
