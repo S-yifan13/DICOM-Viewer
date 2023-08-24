@@ -198,15 +198,12 @@ class Ui_MainWindow(object):
         self.label_5.setStyleSheet("fontsize: 15px; font-weight: bold")
         self.label_5.setObjectName("label_5")
         self.verticalLayout_2.addWidget(self.label_5)
-        self.checkModel = QtWidgets.QRadioButton(self.modelChoose)
+        self.checkModel = QtWidgets.QPushButton(self.modelChoose)
         self.checkModel.setObjectName("checkModel")
         self.verticalLayout_2.addWidget(self.checkModel)
-        self.segmentationModel = QtWidgets.QRadioButton(self.modelChoose)
+        self.segmentationModel = QtWidgets.QPushButton(self.modelChoose)
         self.segmentationModel.setObjectName("segmentationModel")
         self.verticalLayout_2.addWidget(self.segmentationModel)
-        self.callModelButton = QtWidgets.QPushButton(self.modelChoose)
-        self.callModelButton.setObjectName("callModelButton")
-        self.verticalLayout_2.addWidget(self.callModelButton)
         spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem1)
         self.Info = QtWidgets.QFrame(self.centralwidget)
@@ -292,6 +289,7 @@ class Ui_MainWindow(object):
         self.gridLayout.setContentsMargins(11, -1, -1, -1)
         self.gridLayout.setSpacing(10)
         self.gridLayout.setObjectName("gridLayout")
+        # 轴位面
         self.transverse = QtWidgets.QFrame(self.rhreeView)
         self.transverse.setAutoFillBackground(False)
         self.transverse.setStyleSheet("background-color: rgb(0, 0, 0);")
@@ -343,6 +341,8 @@ class Ui_MainWindow(object):
         self.sixthControl.setTImage(self.tImage)
         spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem4)
+
+        # 矢状面
         self.gridLayout.addWidget(self.transverse, 0, 0, 1, 1)
         self.sagittal = QtWidgets.QFrame(self.rhreeView)
         self.sagittal.setAutoFillBackground(False)
@@ -394,10 +394,43 @@ class Ui_MainWindow(object):
         self.frameIndexSlider.setOrientation(QtCore.Qt.Horizontal)
         self.frameIndexSlider.setObjectName("frameIndexSlider")
         self.verticalLayout_5.addWidget(self.frameIndexSlider)
+        # 冠状面
+        self.widget_6 = QtWidgets.QWidget(self.sagittal)
+        self.widget_6.setObjectName("widget_6")
+        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.widget_6)
+        self.horizontalLayout_9.setContentsMargins(-1, 0, -1, 11)
+        self.horizontalLayout_9.setSpacing(0)
+        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.label_24 = QtWidgets.QLabel(self.widget_6)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_24.sizePolicy().hasHeightForWidth())
+        self.label_24.setSizePolicy(sizePolicy)
+        self.label_24.setStyleSheet("color:rgb(255, 255, 255);font-weight: bold; font-size: 15;")
+        self.label_24.setObjectName("label_24")
+        self.horizontalLayout_9.addWidget(self.label_24)
+        self.viewCoro = QtWidgets.QPushButton(self.widget_6)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.viewCoro.sizePolicy().hasHeightForWidth())
+        self.viewCoro.setSizePolicy(sizePolicy)
+        self.viewCoro.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.viewCoro.setStyleSheet("color: rgb(255, 255, 255);font-weight: bold; font-size: 15;")
+        self.viewCoro.setObjectName("viewCoro")
+        self.horizontalLayout_9.addWidget(self.viewCoro)
+        self.verticalLayout_5.addWidget(self.widget_6)
+        self.cImage = SCImageLabel(self.sagittal)
+        # self.cImage.setMaximumSize(QtCore.QSize(615, 200))
+        self.cImage.setText("")
+        self.cImage.setObjectName("cImage")
+        self.verticalLayout_5.addWidget(self.cImage)
         spacerItem12 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_5.addItem(spacerItem12)
         self.gridLayout.addWidget(self.sagittal, 0, 1, 1, 1)
 
+        # 极坐标视图
         self.polar = QtWidgets.QFrame(self.rhreeView)
         self.polar.setAutoFillBackground(False)
         self.polar.setStyleSheet("background-color: rgb(0, 0, 0);")
@@ -441,6 +474,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.addItem(spacerItem8)
         self.gridLayout.addWidget(self.polar, 1, 0, 1, 1)
 
+        # 沿轴360显示
         self.coronal = QtWidgets.QFrame(self.rhreeView)
         self.coronal.setAutoFillBackground(False)
         self.coronal.setStyleSheet("background-color: rgb(0, 0, 0);")
@@ -449,44 +483,42 @@ class Ui_MainWindow(object):
         self.coronal.setObjectName("coronal")
         self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.coronal)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
-        self.widget_6 = QtWidgets.QWidget(self.coronal)
-        self.widget_6.setObjectName("widget_6")
-        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.widget_6)
-        self.horizontalLayout_9.setContentsMargins(-1, 0, -1, 11)
-        self.horizontalLayout_9.setSpacing(0)
-        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
-        self.label_24 = QtWidgets.QLabel(self.widget_6)
+        self.widget_10 = QtWidgets.QWidget(self.polar)
+        self.horizontalLayout_13 = QtWidgets.QHBoxLayout(self.widget_10)
+        self.horizontalLayout_13.setContentsMargins(-1, 0, -1, 11)
+        self.horizontalLayout_13.setSpacing(0)
+        self.horizontalLayout_13.setObjectName("horizontalLayout_13")
+        self.label_28 = QtWidgets.QLabel(self.widget_10)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_24.sizePolicy().hasHeightForWidth())
-        self.label_24.setSizePolicy(sizePolicy)
-        self.label_24.setStyleSheet("color:rgb(255, 255, 255);font-weight: bold; font-size: 15;")
-        self.label_24.setObjectName("label_24")
-        self.horizontalLayout_9.addWidget(self.label_24)
-        self.viewCoro = QtWidgets.QPushButton(self.widget_6)
+        sizePolicy.setHeightForWidth(self.label_28.sizePolicy().hasHeightForWidth())
+        self.label_28.setSizePolicy(sizePolicy)
+        self.label_28.setStyleSheet("color:rgb(255, 255, 255);font-weight: bold; font-size: 15;")
+        self.label_28.setObjectName("label_28")
+        self.horizontalLayout_13.addWidget(self.label_28)
+        self.view360 = QtWidgets.QPushButton(self.widget_10)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.viewCoro.sizePolicy().hasHeightForWidth())
-        self.viewCoro.setSizePolicy(sizePolicy)
-        self.viewCoro.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.viewCoro.setStyleSheet("color: rgb(255, 255, 255);font-weight: bold; font-size: 15;")
-        self.viewCoro.setObjectName("viewCoro")
-        self.horizontalLayout_9.addWidget(self.viewCoro)
-        self.verticalLayout_7.addWidget(self.widget_6)
+        sizePolicy.setHeightForWidth(self.view360.sizePolicy().hasHeightForWidth())
+        self.view360.setSizePolicy(sizePolicy)
+        self.view360.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.view360.setStyleSheet("color: rgb(255, 255, 255);font-weight: bold; font-size: 15;")
+        self.view360.setObjectName("view360")
+        self.horizontalLayout_13.addWidget(self.view360)
+        self.verticalLayout_7.addWidget(self.widget_10)
         spacerItem9 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_7.addItem(spacerItem9)
-        self.cImage = SCImageLabel(self.coronal)
-        # self.cImage.setMaximumSize(QtCore.QSize(615, 200))
-        self.cImage.setText("")
-        self.cImage.setObjectName("cImage")
-        self.verticalLayout_7.addWidget(self.cImage)
+        self.lImage = SCImageLabel(self.coronal)
+        self.lImage.setText('')
+        self.lImage.setObjectName("lImage")
+        self.verticalLayout_7.addWidget(self.lImage)
         spacerItem10 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_7.addItem(spacerItem10)
         self.gridLayout.addWidget(self.coronal, 1, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
-        self.tImage.setSCPLabel(self.sImage, self.cImage, self.pImage)
+        self.tImage.setSCPLLabel(self.sImage, self.cImage, self.pImage, self.lImage)
         self.tImage.model_info = self.modelInfo
 
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -518,7 +550,8 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.pushButton.clicked.connect(self.toFrame)
-        self.callModelButton.clicked.connect(self.callModel)
+        self.segmentationModel.clicked.connect(self.callSegModel)
+        self.checkModel.clicked.connect(self.callCheckModel)
         self.setRatioButton.clicked.connect(self.setRatio)
         self.reportButton.clicked.connect(self.generatePdf)
 
@@ -615,31 +648,26 @@ class Ui_MainWindow(object):
     def callCheckModel(self):
         if self.dicomFile is None:
             return
-        checkDialog = CheckDialog()
-        checkDialog.start_check(self.dicomFile, self.imageGenerate)
-        checkDialog.exec_()
-        self.tImage.setPredictions(checkDialog.getPredictions())
+        if self.callCheck is False:
+            checkDialog = CheckDialog()
+            checkDialog.start_check(self.dicomFile, self.imageGenerate)
+            checkDialog.exec_()
+            self.tImage.setCheckPredictions(checkDialog.getPredictions())
+            self.imageGenerate = True
+            self.callCheck = True
+            self.checkModel.setDisabled(True)
 
     def callSegModel(self):
         if self.dicomFile is None:
             return
-        segDialog = SegDialog()
-        segDialog.start_seg(self.dicomFile, self.imageGenerate)
-        segDialog.exec_()
-        self.tImage.setSegPrediction(segDialog.getPredictions())
-
-    def callModel(self):
-        if self.dicomFile is None:
-            return
-        if self.checkModel.isChecked() and self.callCheck is False:
-            self.callCheckModel()
-            self.imageGenerate = True
-            self.callCheck = True
-
-        elif self.segmentationModel.isChecked() and self.callSeg is False:
-            self.callSegModel()
+        if self.callSeg is False:
+            segDialog = SegDialog()
+            segDialog.start_seg(self.dicomFile, self.imageGenerate)
+            segDialog.exec_()
+            self.tImage.setSegPrediction(segDialog.getPredictions())
             self.imageGenerate = True
             self.callSeg = True
+            self.segmentationModel.setDisabled(True)
 
     def showInfo(self, dicomFile):
         patient = dicomFile.patient
@@ -670,10 +698,9 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "当前帧数"))
         self.pushButton.setText(_translate("MainWindow", "跳转到帧"))
         self.label_5.setText(_translate("MainWindow", "模型选择区"))
-        self.checkModel.setText(_translate("MainWindow", "检测算法"))
+        self.checkModel.setText(_translate("MainWindow", "调用检测算法"))
         self.checkPolar.setText(_translate("MainWindow", "极坐标视图显示"))
-        self.segmentationModel.setText(_translate("MainWindow", "分割算法"))
-        self.callModelButton.setText(_translate("MainWindow", "确定调用"))
+        self.segmentationModel.setText(_translate("MainWindow", "调用分割算法"))
         self.label_6.setText(_translate("MainWindow", "病人信息"))
         self.pid.setText(_translate("MainWindow", "ID"))
         self.name.setText(_translate("MainWindow", "姓名"))

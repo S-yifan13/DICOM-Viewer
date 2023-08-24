@@ -37,43 +37,71 @@ class ReportThread(QtCore.QThread):
         self.seg_predictions = seg_predictions
 
     def goThroughPrediction(self, ratio=config.MIN_CHECK_SHOW_RATIO):
-        result = []
         self.progress_name.emit('正在处理检测结果')
-        nidus_check_contain,  nidus_seg_contain = [False, False, False], [False, False, False]
+        nidus_check_contain,  nidus_seg_contain = [['', -1], ['', -1], ['', -1]], [['', -1], ['', -1], ['', -1]]
         for i in range(len(self.check_predictions)):
-            problem = {
-                'frame_index': i,
-                'nidus_type': ''
-            }
             prediction = self.check_predictions[i]
             for j in range(len(prediction)):
                 for rect in prediction[nidus_type[j]]:
                     if rect[4] < ratio:
                         continue
-                    problem['nidus_type'] += (nidus_type[j] + ',')
-                    if nidus_check_contain[j] is False:
-                        nidus_check_contain[j] = True
+                    last_index = nidus_check_contain[j][1]
+                    if last_index != i - 1 or last_index == -1:
+                        nidus_check_contain[j][0] += (str(i + 1) + ',')
+                    else:
+                        t = len(str(last_index + 1)) + 2
+                        s = nidus_check_contain[j][0]
+                        if len(s) >= t and s[-t] == '-':
+                            t -= 1
+                            nidus_check_contain[j][0] = s[:-t] + str(i + 1) + ','
+                        else:
+                            nidus_check_contain[j][0] = s[:-1] + '-' + str(i + 1) + ','
+                    nidus_check_contain[j][1] = i
                     break
 
             prediction = self.seg_predictions[i]
             for j in range(len(prediction)):
                 if len(prediction[str(j + 1)]) > 0:
-                    problem['nidus_type'] += (seg_nidus[j] + ',')
-                    if nidus_seg_contain[j] is False:
-                        nidus_seg_contain[j] = True
-
-            if problem['nidus_type'] != '':
-                problem['nidus_type'] = problem['nidus_type'][:-1]
-                result.append(problem)
+                    last_index = nidus_seg_contain[j][1]
+                    if last_index != i - 1 or last_index == -1:
+                        nidus_seg_contain[j][0] += (str(i + 1) + ',')
+                    else:
+                        t = len(str(last_index + 1)) + 2
+                        s = nidus_seg_contain[j][0]
+                        if len(s) >= t and s[-t] == '-':
+                            t -= 1
+                            nidus_seg_contain[j][0] = s[:-t] + str(i + 1) + ','
+                        else:
+                            nidus_seg_contain[j][0] = s[:-1] + '-' + str(i + 1) + ','
+                    nidus_seg_contain[j][1] = i
 
             self.progress_update.emit((i + 1) / len(self.check_predictions) * 50)
 
+        # 其中遍历算法是为了打印 1-3, 4-10之类的
+
+        # array = [0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+        # s = ''
+        # last = -1
+        # for i in range(len(array)):
+        #     if array[i] == 1:
+        #         if last != i - 1 or last == -1:
+        #             s += (str(i + 1) + ',')
+        #         else:
+        #             t = len(str(last + 1)) + 2
+        #             if len(s) > t and s[-t] == '-':
+        #                 t -= 1
+        #                 s = s[:-t] + str(i + 1) + ','
+        #             else:
+        #                 s = s[:-1] + '-' + str(i + 1) + ','
+        #         last = i
+        # print(s)
+
         summary = ''
         for i in range(len(nidus_check_contain)):
-            if nidus_check_contain[i]:
+            if nidus_check_contain[i][1] != -1:
                 summary += nidus_type[i] + ','
         for i in range(len(nidus_seg_contain)):
-            if nidus_seg_contain[i]:
+            if nidus_seg_contain[i][1] != -1:
                 summary += seg_nidus[i] + ','
         if summary != '':
             summary = summary[:-1]
@@ -81,6 +109,12 @@ class ReportThread(QtCore.QThread):
         else:
             summary = '该患者数据中未检测到病灶。'
         self.progress_update.emit(50)
+        result = []
+        for i in range(len(nidus_check_contain)):
+            result.append({'nidus_type': nidus_type[i], 'frame_index': nidus_check_contain[i][0]})
+        for i in range(len(nidus_seg_contain)):
+            result.append({'nidus_type': seg_nidus[i], 'frame_index': nidus_seg_contain[i][0]})
+
         return summary, result
 
     def generateReport(self, summary, result):
@@ -89,9 +123,10 @@ class ReportThread(QtCore.QThread):
         contents = [Paragraph('OCT Report', title_style),
                     Paragraph(summary, paragraph_normal)]
         for r in result:
-            subtitle = '帧_' + str(r['frame_index']) + ':{' + r['nidus_type'] + '}'
-            contents.append(Paragraph(subtitle, paragraph_normal))
-            self.progress_update.emit(min(50 + r['frame_index'] / len(result) * 50, 99))
+            if r['frame_index'] != '':
+                subtitle = '{}: {}'.format(r['nidus_type'], r['frame_index'])
+                contents.append(Paragraph(subtitle, paragraph_normal))
+        self.progress_update.emit(80)
         self.pdf.build(contents)
         self.progress_update.emit(100)
 

@@ -2,32 +2,30 @@ import numpy as np
 import math
 import cv2
 
+from dicomUtil import Dicom
+
+# PAI值
+PI = math.pi
 def create_line_image(img):
-    # ----- 全局参数
-    # PAI值
-    PI = math.pi
-    # 设置输入图像固定尺寸（必要）
-    HEIGHT, WIDTH, CHANNEL = img.shape
-    # 输入图像圆的半径，一般是宽高一半
-    CIRCLE_RADIUS = int(HEIGHT / 2)
-    # 圆心坐标
-    CIRCLE_CENTER = [HEIGHT / 2, WIDTH / 2]
-    # 极坐标转换后图像的高，可自己设置
-    LINE_HEIGHT = int(CIRCLE_RADIUS)
+    height, width, channel = img.shape
+    circle_radius = int(height / 2)
+    circle_center = [height / 2, width / 2]
+    # 极坐标转换后图像的高
+    line_height = int(circle_radius)
     # 极坐标转换后图像的宽，一般是原来圆形的周长
-    LINE_WIDTH = int(2 * CIRCLE_RADIUS * PI)
+    line_width = int(2 * circle_radius * PI)
     # 建立展开后的图像
-    line_image = np.zeros((LINE_HEIGHT, LINE_WIDTH, CHANNEL), dtype=np.uint8)
+    line_image = np.zeros((line_height, line_width, channel), dtype=np.uint8)
     # 按照圆的极坐标赋值
     for row in range(line_image.shape[0]):
         for col in range(line_image.shape[1]):
             # 角度，最后的-0.1是用于优化结果，可以自行调整
-            theta = PI * 2 / LINE_WIDTH * (col + 1) - 0.2
+            theta = PI * 2 / line_width * (col + 1) - 0.2
             # 半径，减1防止超界
-            rho = CIRCLE_RADIUS - row - 1
+            rho = circle_radius - row - 1
 
-            x = int(CIRCLE_CENTER[0] + rho * math.cos(theta) + 0.0)
-            y = int(CIRCLE_CENTER[1] - rho * math.sin(theta) + 0.0)
+            x = int(circle_center[0] + rho * math.cos(theta) + 0.0)
+            y = int(circle_center[1] - rho * math.sin(theta) + 0.0)
 
             # 赋值
             line_image[row, col, :] = img[y, x, :]
@@ -35,11 +33,43 @@ def create_line_image(img):
     # line_image = cv2.rotate(line_image, cv2.ROTATE_90_CLOCKWISE)
     return line_image
 
+#  极坐标转换为直角坐标
+def polar2xy(r, theta, radius):
+    theta = theta / 180 * math.pi
+    x = r * math.cos(theta) + radius
+    y = radius - r * math.sin(theta)
+    return x, y
 
-# ----- 主程序
-def main(imgpath):
+def getDiameterPixel(img, diameter, theta):
+    height, width, channel = img.shape
+    radius = int(height / 2)
+    for i in range(-radius, radius):
+        x, y = polar2xy(i, theta, radius)
+        x = int(x)
+        y = int(y)
+        if 0 <= x < width and 0 <= y < height:
+            diameter[i + radius] = img[y, x]
+        else:
+            diameter[i + radius] = np.array([0, 0, 0])
+
+
+def getLongitudinal(pixel_array, theta, ratio):
+    new_width, height, width, channel = pixel_array.shape
+    longitudinal_view = np.zeros((new_width, height, channel), dtype=np.uint8)
+    for index, img in enumerate(pixel_array):
+        getDiameterPixel(img, longitudinal_view[index], theta)
+    longitudinal_view = longitudinal_view.transpose(1, 0, 2)
+    longitudinal_view = cv2.resize(longitudinal_view, (int(height * ratio), height))
+    cv2.imshow("longitudinal", longitudinal_view)
+    cv2.waitKey()
+    cv2.destroyAllWindows()
+    cv2.imwrite("temp/l.png", longitudinal_view)
+    return longitudinal_view
+
+
+def test_polar(img_path):
     # 读取图像
-    img = cv2.imread(imgpath)
+    img = cv2.imread(img_path)
     if img is None:
         print("please check image path")
         return
@@ -56,8 +86,16 @@ def main(imgpath):
     cv2.destroyAllWindows()
     cv2.imwrite("temp/0.png", output)
 
+def test_longitudinal():
+    dicom = Dicom('data/data')
+    pixel_array = dicom.pixelAllTransverseRect()
+    theta = 45
+    ratio = dicom.longitudinalWidth / dicom.longitudinalHeight
+    getLongitudinal(pixel_array, theta, ratio)
+
 
 if __name__ == '__main__':
     # 输入图像路径
-    img_path = "temp/check/0.png"
-    main(img_path)
+    # img_path = "temp/check/0.png"
+    # test_polar(img_path)
+    test_longitudinal()

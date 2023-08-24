@@ -61,6 +61,7 @@ class Dicom:
             # 纵截面起始X坐标
             self.longitudinalMinX = regions[1].RegionLocationMinX0
             self.longitudinalMaxX = regions[1].RegionLocationMaxX1
+            self.longitudinalWidth = self.longitudinalMaxX - self.longitudinalMinX
             # 纵截面起始X坐标
             self.longitudinalMaxY = regions[1].RegionLocationMaxY1
             self.longitudinalMinY = regions[1].RegionLocationMinY0
@@ -87,6 +88,9 @@ class Dicom:
 
     def pixelAllTransverse(self):
         return self.pixel_array[:, :self.transverseMaxY, :, :]
+
+    def pixelAllTransverseRect(self):
+        return self.pixel_array[:, :self.transverseMaxY, self.transverseMinX:self.transverseMaxX, :]
 
     def frame2Png(self, frame_index, target_path):
         if frame_index < 0 or frame_index >= self.pixel_array.shape[0]:

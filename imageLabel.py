@@ -43,6 +43,7 @@ def draw_seg_nidus(array, painter, color, scale=1, left_start=0, top_start=0):
 class ImageLabel(QLabel):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.l_label = None
         self.draw_check = [False, False, False]
         self.check_color = [Qt.white, Qt.white, Qt.white, Qt.white, Qt.white, Qt.white]
         self.check_predictions = None
@@ -89,10 +90,11 @@ class ImageLabel(QLabel):
         self.show_name_checkbox = show_name_checkbox
         show_name_checkbox.stateChanged.connect(self.setShowName)
 
-    def setSCPLabel(self, s_label, c_label, p_label):
+    def setSCPLLabel(self, s_label, c_label, p_label, l_label):
         self.s_label = s_label
         self.c_label = c_label
         self.p_label = p_label
+        self.l_label = l_label
 
     def updatePLabel(self):
         if self.frames is None or len(self.frames) == 0:
@@ -180,7 +182,7 @@ class ImageLabel(QLabel):
         self.s_label.setFrameIndex(frame_index)
         self.c_label.setFrameIndex(frame_index)
 
-    def setCheckPrediction(self, i, value):
+    def setShowCheckPrediction(self, i, value):
         self.hidePolar()
         if 0 <= i < 3:
             self.draw_check[i] = value
@@ -188,6 +190,8 @@ class ImageLabel(QLabel):
         elif 3 <= i < 5:
             self.draw_seg[i-3] = value
             self.update()
+        self.changeModelInfo()
+
 
     def setColor(self, i, color):
         self.hidePolar()
@@ -219,8 +223,9 @@ class ImageLabel(QLabel):
                     prediction = self.seg_predictions[self.frame_index][str(i + 1)]
                     draw_seg_nidus(prediction, painter, self.check_color[3], self.scale, self.left_start, self.top_start)
 
-    def setPredictions(self, predictions):
+    def setCheckPredictions(self, predictions):
         self.check_predictions = predictions
+        self.changeModelInfo()
 
     def setScale(self, scale):
         self.scale = scale

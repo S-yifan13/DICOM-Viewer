@@ -54,7 +54,7 @@ class SegThreadAll(QThread):
                     files.append(('image', open(temp_path, 'rb')))
                 response = requests.post(config.SEGMENTATION_MODEL_URL, files=files)
                 predictions += response.json()['predictions']
-                print('get check prediction success' + str(i))
+                print('get seg prediction success' + str(i))
                 self.progress_update.emit(20 + 80 * i / batch)
             self.progress_update.emit(100)
             self.progress_name.emit('检测完成!')
