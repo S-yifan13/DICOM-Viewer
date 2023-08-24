@@ -12,8 +12,6 @@ class SCImageLabel(QLabel):
         self.total_frame = 0
         self.showLine = show_line
 
-
-
     def showCertainImage(self, pixel_array):
         self.setScaledContents(True)
         height, width, channel = pixel_array.shape

@@ -44,7 +44,7 @@
       <x>20</x>
       <y>30</y>
       <width>211</width>
-      <height>671</height>
+      <height>761</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -450,9 +450,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>710</y>
+      <y>800</y>
       <width>211</width>
-      <height>211</height>
+      <height>121</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -489,13 +489,6 @@
       <widget class="QRadioButton" name="radioButton_2">
        <property name="text">
         <string>分割算法</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="text">
-        <string>确定调用</string>
        </property>
       </widget>
      </item>

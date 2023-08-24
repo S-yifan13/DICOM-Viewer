@@ -66,8 +66,10 @@ class Ui_MainWindow(object):
         MainWindow.setStyleSheet("background-color: rgb(227, 227, 227);")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+        # 显示控制区
         self.showControl = QtWidgets.QFrame(self.centralwidget)
-        self.showControl.setGeometry(QtCore.QRect(20, 30, 211, 671))
+        self.showControl.setGeometry(QtCore.QRect(20, 30, 211, 761))
         self.showControl.setStyleSheet("background-color: rgb(255,255,255);")
         self.showControl.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.showControl.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -96,18 +98,18 @@ class Ui_MainWindow(object):
         self.frameIndexLable.setObjectName("frameIndexLable")
         self.horizontalLayout_3.addWidget(self.frameIndexLable)
         self.verticalLayout.addWidget(self.widget_3)
-        self.widget_2 = QtWidgets.QWidget(self.showControl)
-        self.widget_2.setObjectName("widget_2")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget_2)
+        self.widget_11 = QtWidgets.QWidget(self.showControl)
+        self.widget_11.setObjectName("widget_11")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget_11)
         self.horizontalLayout_2.setContentsMargins(-1, 0, -1, -1)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.frameIndexSpinBox = QtWidgets.QSpinBox(self.widget_2)
+        self.frameIndexSpinBox = QtWidgets.QSpinBox(self.widget_11)
         self.frameIndexSpinBox.setObjectName("frameIndexSpinBox")
         self.horizontalLayout_2.addWidget(self.frameIndexSpinBox)
-        self.pushButton = QtWidgets.QPushButton(self.widget_2)
+        self.pushButton = QtWidgets.QPushButton(self.widget_11)
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout_2.addWidget(self.pushButton)
-        self.verticalLayout.addWidget(self.widget_2)
+        self.verticalLayout.addWidget(self.widget_11)
         self.label_7 = QtWidgets.QLabel(self.showControl)
         self.label_7.setStyleSheet("font-weight: bold; color:rgb(0, 0, 127);margin-top:5px")
         self.label_7.setObjectName("label_7")
@@ -150,6 +152,8 @@ class Ui_MainWindow(object):
         self.setRatioButton.setObjectName("setRatioButton")
         self.horizontalLayout_10.addWidget(self.setRatioButton)
         self.verticalLayout.addWidget(self.widget_7)
+
+        # 分割病灶显示控制
         self.label_10 = QtWidgets.QLabel(self.showControl)
         self.label_10.setStyleSheet("font-weight: bold; color:rgb(0, 0, 127);margin-top:5px")
         self.label_10.setObjectName("label_10")
@@ -173,7 +177,8 @@ class Ui_MainWindow(object):
         self.alphaSlider.setValue(255)
         self.alphaSlider.setStyleSheet('margin-left: 30px;')
         self.verticalLayout.addWidget(self.alphaSlider)
-
+        
+        # 极坐标显示控制
         self.label_25 = QtWidgets.QLabel(self.showControl)
         self.label_25.setStyleSheet("font-weight: bold; color:rgb(0, 0, 127);margin-top:5px")
         self.label_25.setObjectName("label_25")
@@ -182,11 +187,31 @@ class Ui_MainWindow(object):
         self.checkPolar.setStyleSheet("margin-left: 15px; margin-top: 2px")
         self.checkPolar.setObjectName("checkPolar")
         self.verticalLayout.addWidget(self.checkPolar)
-
+        
+        # 沿轴360显示控制
+        self.label_30 = QtWidgets.QLabel(self.showControl)
+        self.label_30.setStyleSheet("font-weight: bold; color:rgb(0, 0, 127);margin-top:10px")
+        self.label_30.setObjectName("label_30")
+        self.verticalLayout.addWidget(self.label_30)
+        self.widget_10 = QtWidgets.QWidget(self.showControl)
+        self.widget_10.setObjectName("widget_10")
+        self.horizontalLayout_14 = QtWidgets.QHBoxLayout(self.widget_10)
+        self.horizontalLayout_14.setContentsMargins(-1, 5, -1, 5)
+        self.horizontalLayout_14.setObjectName("horizontalLayout_14")
+        self.label_31 = QtWidgets.QLabel(self.widget_10)
+        self.label_31.setObjectName("label_31")
+        self.horizontalLayout_14.addWidget(self.label_31)
+        self.thetaSpinBox = QtWidgets.QSpinBox(self.widget_11)
+        self.thetaSpinBox.setObjectName("thetaSpinBox")
+        self.thetaSpinBox.setRange(0, 360)
+        self.horizontalLayout_14.addWidget(self.thetaSpinBox)
+        self.verticalLayout.addWidget(self.widget_10)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
+        
+        # 模型选择区
         self.modelChoose = QtWidgets.QFrame(self.centralwidget)
-        self.modelChoose.setGeometry(QtCore.QRect(20, 710, 211, 211))
+        self.modelChoose.setGeometry(QtCore.QRect(20, 800, 211, 121))
         self.modelChoose.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.modelChoose.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.modelChoose.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -280,6 +305,7 @@ class Ui_MainWindow(object):
         spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_3.addItem(spacerItem2)
 
+        # 视图区
         self.rhreeView = QtWidgets.QFrame(self.centralwidget)
         self.rhreeView.setGeometry(QtCore.QRect(240, 20, 1311, 911))
         self.rhreeView.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -521,6 +547,7 @@ class Ui_MainWindow(object):
         self.tImage.setSCPLLabel(self.sImage, self.cImage, self.pImage, self.lImage)
         self.tImage.model_info = self.modelInfo
 
+        # 菜单
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1835, 26))
         self.menubar.setObjectName("menubar")
@@ -548,17 +575,20 @@ class Ui_MainWindow(object):
         self.menu.addAction(self.searchFile)
         self.menubar.addAction(self.menu.menuAction())
 
+        # 函数绑定
         self.retranslateUi(MainWindow)
         self.pushButton.clicked.connect(self.toFrame)
         self.segmentationModel.clicked.connect(self.callSegModel)
         self.checkModel.clicked.connect(self.callCheckModel)
         self.setRatioButton.clicked.connect(self.setRatio)
         self.reportButton.clicked.connect(self.generatePdf)
+        self.thetaSpinBox.valueChanged.connect(self.toTheta)
 
         self.viewSagi.clicked.connect(self.sagittalView)
         self.viewCoro.clicked.connect(self.coronalView)
         self.viewTrans.clicked.connect(self.transverseView)
         self.viewPolar.clicked.connect(self.polarView)
+        self.view360.clicked.connect(self.longitudinalView)
 
         self.alphaSlider.valueChanged.connect(self.tImage.setAlpha)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -574,7 +604,12 @@ class Ui_MainWindow(object):
 
     def exportFileAction(self):
         pass
-
+    
+    def toTheta(self):
+        value = self.thetaSpinBox.value()
+        self.tImage.setTheta(value)
+        self.label_28.setText("沿轴{}°纵截面 Longitudinal View".format(value))
+    
     def generatePdf(self):
         if self.dicomFile is None:
             return
@@ -612,11 +647,14 @@ class Ui_MainWindow(object):
         self.sImage.setScale(scale)
         self.cImage.setScale(scale)
         self.pImage.setScale(scale)
+        self.lImage.setScale(scale)
         self.tImage.setFixedSize(config.IMAGE_WIDTH, dicomFile.transverseHeight * scale)
         self.sImage.setFixedSize(config.IMAGE_WIDTH, dicomFile.longitudinalHeight * scale)
         self.cImage.setFixedSize(config.IMAGE_WIDTH, dicomFile.longitudinalHeight * scale)
         self.pImage.setFixedSize(config.IMAGE_WIDTH, dicomFile.transverseHeight / 2 * scale * scale)
+        self.lImage.setFixedSize(config.IMAGE_WIDTH, dicomFile.longitudinalHeight * scale)
         self.frameIndexSpinBox.setRange(1, dicomFile.frame_count)
+        self.tImage.longitudinalHeight = dicomFile.longitudinalHeight
         self.tImage.setPolarCheckbox(self.checkPolar)
         self.tImage.setFrames(dicomFile.pixelAllTransverse())
         self.tImage.setSlider(self.frameIndexSlider, dicomFile.frame_count)
@@ -624,6 +662,7 @@ class Ui_MainWindow(object):
         self.sImage.showCertainImage(dicomFile.pixelSagittal())
         self.cImage.showCertainImage(dicomFile.pixelCoronal())
         self.tImage.setShowNameCheckbox(self.show_nidus_name)
+        self.tImage.setLongitudinal()
 
     def toFrame(self):
         if self.dicomFile:
@@ -644,6 +683,10 @@ class Ui_MainWindow(object):
     def polarView(self):
         if self.dicomFile:
             imageView(self.pImage.getPixmapPainted())
+
+    def longitudinalView(self):
+        if self.dicomFile:
+            imageView(self.lImage.getPixmapPainted())
 
     def callCheckModel(self):
         if self.dicomFile is None:
@@ -690,6 +733,7 @@ class Ui_MainWindow(object):
         self.label_7.setText(_translate("MainWindow", "检测结果病灶显示："))
         self.label_10.setText(_translate("MainWindow", "分割结果病灶显示："))
         self.label_25.setText(_translate("MainWindow", "极坐标视图显示："))
+        self.label_30.setText(_translate("MainWindow", "沿轴360°纵截面显示："))
         self.label_14.setText(_translate("MainWindow", "帧显示："))
         self.show_nidus_name.setText(_translate("MainWindow", "显示病灶名称"))
         self.label_9.setText(_translate("MainWindow", "置信度"))
@@ -697,6 +741,7 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "病灶透明度"))
         self.label_4.setText(_translate("MainWindow", "当前帧数"))
         self.pushButton.setText(_translate("MainWindow", "跳转到帧"))
+        self.label_31.setText(_translate("MainWindow", "当前夹角(°)"))
         self.label_5.setText(_translate("MainWindow", "模型选择区"))
         self.checkModel.setText(_translate("MainWindow", "调用检测算法"))
         self.checkPolar.setText(_translate("MainWindow", "极坐标视图显示"))
@@ -723,6 +768,8 @@ class Ui_MainWindow(object):
         self.viewPolar.setText(_translate("MainWindow", "点击查看"))
         self.label_18.setText(_translate("MainWindow", "轴位面 Transverse View"))
         self.viewTrans.setText(_translate("MainWindow", "点击查看"))
+        self.label_28.setText(_translate("MainWindow", "沿轴0°纵截面 Longitudinal View"))
+        self.view360.setText(_translate("MainWindow", "点击查看"))
         self.reportButton.setText(_translate("MainWindow", "智能诊断报告"))
         self.menu.setTitle(_translate("MainWindow", "文件"))
         self.importFile.setText(_translate("MainWindow", "导入"))

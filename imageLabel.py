@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QLabel, QApplication
 from PyQt5.QtGui import QImage, QPixmap, QPen, QPainter, QColor
 import numpy as np
 import config
-from polar import create_line_image
+from polar import create_line_image, getLongitudinal, polar2xy
 
 nidus_type = config.NIDUS_TYPE
 
@@ -66,6 +66,20 @@ class ImageLabel(QLabel):
         self.polar_show = False
         self.polar_checkbox = None
         self.model_info = None
+        self.theta = 0
+        self.longitudinalHeight = 0
+
+    def setTheta(self, theta):
+        self.theta = theta
+        self.setLongitudinal()
+        self.update()
+
+    def setLongitudinal(self):
+        if len(self.frames) == 0 or self.longitudinalHeight == 0:
+            return
+        scale = self.frames.shape[2] / self.longitudinalHeight
+        longitudinal_view = getLongitudinal(self.frames, self.theta, scale, self.left_start)
+        self.l_label.showCertainImage(longitudinal_view)
 
     def setSegPrediction(self, seg_predictions):
         self.seg_predictions = seg_predictions
@@ -117,6 +131,8 @@ class ImageLabel(QLabel):
             self.s_label.setTotalFrame(len(self.frames))
         if self.c_label is not None:
             self.c_label.setTotalFrame(len(self.frames))
+        if self.l_label is not None:
+            self.l_label.setTotalFrame(len(self.frames))
 
     def setAlpha(self, value):
         for i in range(3, 6):
@@ -181,6 +197,7 @@ class ImageLabel(QLabel):
         self.showCurrentImage()
         self.s_label.setFrameIndex(frame_index)
         self.c_label.setFrameIndex(frame_index)
+        self.l_label.setFrameIndex(frame_index)
 
     def setShowCheckPrediction(self, i, value):
         self.hidePolar()
@@ -203,9 +220,24 @@ class ImageLabel(QLabel):
         self.polar_checkbox.setChecked(False)
         self.p_label.setPixmap(QPixmap())
 
+    def drawDiameter(self, painter):
+        if self.frames is None or len(self.frames) == 0:
+            return
+        radius = self.frames.shape[1] // 2
+        x1, y1 = polar2xy(radius, self.theta, radius)
+        x2, y2 = polar2xy(-radius, self.theta, radius)
+        x1 = (x1 + self.left_start) * self.scale
+        y1 = (y1 + self.top_start) * self.scale
+        x2 = (x2 + self.left_start) * self.scale
+        y2 = (y2 + self.top_start) * self.scale
+        pen = QPen(Qt.white)
+        painter.setPen(pen)
+        painter.drawLine(int(x1), int(y1), int(x2), int(y2))
+
     def paintEvent(self, event):
         super().paintEvent(event)
         painter = QPainter(self)
+        self.drawDiameter(painter)
         if self.polar_show:
             self.updatePLabel()
         if self.check_predictions is not None:
@@ -233,6 +265,7 @@ class ImageLabel(QLabel):
     def getPixmapPainted(self):
         pixmap = self.pixmap().copy()
         painter = QPainter(pixmap)
+        self.drawDiameter(painter)
         if self.check_predictions is not None:
             for i in range(3):
                 text = nidus_type[i] if self.show_name else None

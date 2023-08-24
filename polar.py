@@ -53,18 +53,21 @@ def getDiameterPixel(img, diameter, theta):
             diameter[i + radius] = np.array([0, 0, 0])
 
 
-def getLongitudinal(pixel_array, theta, ratio):
+def getLongitudinal(pixel_array, theta, ratio, left_start=0):
     new_width, height, width, channel = pixel_array.shape
     longitudinal_view = np.zeros((new_width, height, channel), dtype=np.uint8)
-    for index, img in enumerate(pixel_array):
+    for index in range(len(pixel_array)):
+        img = pixel_array[index][:, left_start:left_start + height, :]
         getDiameterPixel(img, longitudinal_view[index], theta)
     longitudinal_view = longitudinal_view.transpose(1, 0, 2)
     longitudinal_view = cv2.resize(longitudinal_view, (int(height * ratio), height))
-    cv2.imshow("longitudinal", longitudinal_view)
+    return longitudinal_view
+
+def showImage(img):
+    cv2.imshow("longitudinal", img)
     cv2.waitKey()
     cv2.destroyAllWindows()
-    cv2.imwrite("temp/l.png", longitudinal_view)
-    return longitudinal_view
+    cv2.imwrite("temp/l.png", img)
 
 
 def test_polar(img_path):
@@ -91,7 +94,8 @@ def test_longitudinal():
     pixel_array = dicom.pixelAllTransverseRect()
     theta = 45
     ratio = dicom.longitudinalWidth / dicom.longitudinalHeight
-    getLongitudinal(pixel_array, theta, ratio)
+    img = getLongitudinal(pixel_array, theta, ratio)
+    showImage(img)
 
 
 if __name__ == '__main__':

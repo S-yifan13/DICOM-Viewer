@@ -119,6 +119,7 @@ class Dicom:
         z = (self.transverseMaxX + self.transverseMinX) // 2
         sagittal_view = self.pixel_array[:, :self.transverseMaxY, z, :].transpose(1, 0, 2)
         sagittal_view = self.resizeXY(sagittal_view)
+        sagittal_view = cv2.flip(sagittal_view, 0)
         return sagittal_view
 
     def pixelCoronal(self):
