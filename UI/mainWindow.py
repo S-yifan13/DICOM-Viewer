@@ -48,7 +48,7 @@ def imageView(image_label):
 class Ui_MainWindow(object):
     def __init__(self):
         self.dicomFile = None
-        self.imageGenerate = True
+        self.imageGenerate = False  # 是否已生成单帧的图片
         self.callCheck = False
         self.callSeg = False
 
@@ -116,11 +116,11 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.label_7)
 
         # 检测病灶显示控制
-        self.firstControl = CheckColorWidget(self.showControl, '第一类病灶js', index=0)
+        self.firstControl = CheckColorWidget(self.showControl, '巨噬细胞', index=0)
         self.verticalLayout.addWidget(self.firstControl)
-        self.secondControl = CheckColorWidget(self.showControl, '第二类病灶kq', index=1)
+        self.secondControl = CheckColorWidget(self.showControl, '空腔', index=1)
         self.verticalLayout.addWidget(self.secondControl)
-        self.thirdControl = CheckColorWidget(self.showControl, '第三类病灶xs', index=2)
+        self.thirdControl = CheckColorWidget(self.showControl, '血栓', index=2)
         self.verticalLayout.addWidget(self.thirdControl)
 
         self.show_nidus_name = QtWidgets.QCheckBox(self.showControl)
@@ -570,7 +570,7 @@ class Ui_MainWindow(object):
         self.searchFile.setObjectName("searchFile")
         self.searchFile.triggered.connect(self.searchFileAction)
         self.menu.addAction(self.importFile)
-        self.menu.addAction(self.exportFile)
+        # self.menu.addAction(self.exportFile)
         self.menu.addAction(self.uploadFile)
         self.menu.addAction(self.searchFile)
         self.menubar.addAction(self.menu.menuAction())

@@ -6,7 +6,8 @@ import config
 from polar import create_line_image, getLongitudinal, polar2xy
 
 nidus_type = config.NIDUS_TYPE
-
+seg_type = config.NIDUS_SEG
+check_type = config.NIDUS_CHECK
 
 def drawOneRect(painter, prediction, color, scale=1, left_start=0, top_start=0, text=None):
     pen = QPen(color)
@@ -113,7 +114,7 @@ class ImageLabel(QLabel):
     def updatePLabel(self):
         if self.frames is None or len(self.frames) == 0:
             return
-        pixmap = self.getPixmapPainted()
+        pixmap = self.getPixmapPainted(False)
         pixmap = pixmap.scaled(pixmap.size() / self.scale, aspectRatioMode=Qt.KeepAspectRatio)
         image = pixmap.toImage()
         size = image.size()
@@ -242,7 +243,7 @@ class ImageLabel(QLabel):
             self.updatePLabel()
         if self.check_predictions is not None:
             for i in range(3):
-                text = nidus_type[i] if self.show_name else None
+                text = check_type[i] if self.show_name else None
                 if self.draw_check[i]:
                     prediction = self.check_predictions[self.frame_index][nidus_type[i]]
                     drawOneRect(painter, prediction, self.check_color[i], self.scale,
@@ -262,13 +263,14 @@ class ImageLabel(QLabel):
     def setScale(self, scale):
         self.scale = scale
 
-    def getPixmapPainted(self):
+    def getPixmapPainted(self, show_line=True):
         pixmap = self.pixmap().copy()
         painter = QPainter(pixmap)
-        self.drawDiameter(painter)
+        if show_line:
+            self.drawDiameter(painter)
         if self.check_predictions is not None:
             for i in range(3):
-                text = nidus_type[i] if self.show_name else None
+                text = check_type[i] if self.show_name else None
                 if self.draw_check[i]:
                     prediction = self.check_predictions[self.frame_index][nidus_type[i]]
                     drawOneRect(painter, prediction, self.check_color[i], self.scale,
@@ -304,13 +306,13 @@ class ImageLabel(QLabel):
                         if k[4] > config.MIN_CHECK_SHOW_RATIO:
                             count += 1
                     if count > 0:
-                        nidus_str += nidus_type[i] + ','
+                        nidus_str += check_type[i] + ','
                         nidus_count += 1
             if self.seg_predictions is not None:
                 nidus_seg = self.seg_predictions[self.frame_index]
                 for i in range(3):
                     if len(nidus_seg[str(i + 1)]) > 0:
-                        nidus_str += nidus_type[i] + ','
+                        nidus_str += seg_type[i] + ','
                         nidus_count += 1
             if len(nidus_str) == 0:
                 string += '未检测到病灶'

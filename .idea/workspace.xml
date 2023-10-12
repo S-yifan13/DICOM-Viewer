@@ -7,11 +7,9 @@
     <list default="true" id="08dbc0ef-a229-4837-bd77-8c507d1f8862" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/mainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/mainWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/viewer.ui" beforeDir="false" afterPath="$PROJECT_DIR$/UI/viewer.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dicomUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/dicomUtil.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/imageLabel.py" beforeDir="false" afterPath="$PROJECT_DIR$/imageLabel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/polar.py" beforeDir="false" afterPath="$PROJECT_DIR$/polar.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scImageLabel.py" beforeDir="false" afterPath="$PROJECT_DIR$/scImageLabel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reportDialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/reportDialog.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +49,7 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.statistic.project.settings&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -280,6 +278,13 @@
       <workItem from="1692796235979" duration="12069000" />
       <workItem from="1692839350171" duration="6054000" />
       <workItem from="1692861565451" duration="5699000" />
+      <workItem from="1692886125930" duration="1278000" />
+      <workItem from="1692944839184" duration="3791000" />
+      <workItem from="1693137745556" duration="52000" />
+      <workItem from="1693138004137" duration="4546000" />
+      <workItem from="1695262376210" duration="1216000" />
+      <workItem from="1695798820466" duration="3000" />
+      <workItem from="1697100285358" duration="25000" />
     </task>
     <task id="LOCAL-00001" summary="add: dicom类，信息读取、绘制三视图">
       <created>1690789206776</created>
@@ -437,7 +442,15 @@
       <option name="project" value="LOCAL" />
       <updated>1692861069971</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="add: 沿轴360°展示横截面">
+      <option name="closed" value="true" />
+      <created>1692886249773</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1692886249773</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -473,7 +486,8 @@
     <MESSAGE value="add: 病灶bug+显示" />
     <MESSAGE value="add: 报告功能1.0" />
     <MESSAGE value="add: 报告功能2.0, 沿轴360函数, 新布局" />
-    <option name="LAST_COMMIT_MESSAGE" value="add: 报告功能2.0, 沿轴360函数, 新布局" />
+    <MESSAGE value="add: 沿轴360°展示横截面" />
+    <option name="LAST_COMMIT_MESSAGE" value="add: 沿轴360°展示横截面" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -498,25 +512,15 @@
           <line>68</line>
           <option name="timeStamp" value="98" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/imageLabel.py</url>
-          <line>280</line>
-          <option name="timeStamp" value="135" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/reportDialog.py</url>
-          <line>48</line>
+          <line>49</line>
           <option name="timeStamp" value="143" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/reportDialog.py</url>
-          <line>64</line>
+          <line>65</line>
           <option name="timeStamp" value="144" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/UI/mainWindow.py</url>
-          <line>664</line>
-          <option name="timeStamp" value="146" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-defaults>
@@ -538,7 +542,7 @@
     <SUITE FILE_PATH="coverage/DicomViewer$colorPicker.coverage" NAME="colorPicker 覆盖结果" MODIFIED="1690816594624" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UI" />
     <SUITE FILE_PATH="coverage/DicomViewer$url.coverage" NAME="url 覆盖结果" MODIFIED="1691594647899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/DicomViewer$reportDialog.coverage" NAME="reportDialog 覆盖结果" MODIFIED="1692807340648" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/DicomViewer$main.coverage" NAME="main 覆盖结果" MODIFIED="1692866834928" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/DicomViewer$main.coverage" NAME="main 覆盖结果" MODIFIED="1695263435597" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/DicomViewer$callModel.coverage" NAME="callModel 覆盖结果" MODIFIED="1692198757959" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/DicomViewer$fileUtil.coverage" NAME="fileUtil 覆盖结果" MODIFIED="1690808874475" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/DicomViewer$searchDialog.coverage" NAME="searchDialog 覆盖结果" MODIFIED="1692194718892" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

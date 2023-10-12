@@ -14,6 +14,7 @@ pdfmetrics.registerFont(TTFont('SimSun', 'SimSun.ttf'))  #注册字体
 styles = getSampleStyleSheet()
 nidus_type = config.NIDUS_TYPE
 seg_nidus = config.NIDUS_SEG
+check_nidus = config.NIDUS_CHECK
 
 
 def writeBasicInfo(dicom, pdf):
@@ -99,7 +100,7 @@ class ReportThread(QtCore.QThread):
         summary = ''
         for i in range(len(nidus_check_contain)):
             if nidus_check_contain[i][1] != -1:
-                summary += nidus_type[i] + ','
+                summary += check_nidus[i] + ','
         for i in range(len(nidus_seg_contain)):
             if nidus_seg_contain[i][1] != -1:
                 summary += seg_nidus[i] + ','
@@ -111,7 +112,7 @@ class ReportThread(QtCore.QThread):
         self.progress_update.emit(50)
         result = []
         for i in range(len(nidus_check_contain)):
-            result.append({'nidus_type': nidus_type[i], 'frame_index': nidus_check_contain[i][0]})
+            result.append({'nidus_type': check_nidus[i], 'frame_index': nidus_check_contain[i][0]})
         for i in range(len(nidus_seg_contain)):
             result.append({'nidus_type': seg_nidus[i], 'frame_index': nidus_seg_contain[i][0]})
 
