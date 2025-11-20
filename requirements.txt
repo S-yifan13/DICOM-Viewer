@@ -1,0 +1,8 @@
+requests
+PyQt5
+reportlab
+numpy
+qimage2ndarray
+opencv-python
+pydicom
+matplotlib
